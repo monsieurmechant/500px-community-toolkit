@@ -4,8 +4,6 @@ namespace App;
 
 trait EncryptsFields
 {
-    protected $encryptable = [];
-
     public function getAttribute($key)
     {
         if (in_array($key, $this->encryptable)) {
