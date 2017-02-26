@@ -26,7 +26,6 @@ class User extends Authenticatable
         'email',
         'user_id',
         'avatar',
-        'access_token',
     ];
 
     /**
@@ -36,6 +35,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'remember_token',
+        'access_token',
         'access_token_secret',
     ];
 }
