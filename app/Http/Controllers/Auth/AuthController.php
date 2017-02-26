@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
 
     /**
-     * Redirect the user to the GitHub authentication page.
+     * Redirect the user to the 500px authentication page.
      *
      * @return Response
      */
@@ -22,7 +22,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Obtain the user information from GitHub.
+     * Obtain the user information from 500px.
      *
      * @return Response
      */
@@ -41,9 +41,11 @@ class AuthController extends Controller
     }
 
     /**
-     * Return user if exists; create and return if doesn't
+     * Return user if the user ID exists.
+     * Create and return it if doesn't.
      *
-     * @param $pxUser
+     *
+     * @param \Laravel\Socialite\One\User $pxUser
      * @return User
      */
     private function findOrCreateUser(\Laravel\Socialite\One\User $pxUser)
@@ -51,15 +53,16 @@ class AuthController extends Controller
         if (null !== $authUser = User::where('user_id', $pxUser->id)->first()) {
             return $authUser;
         }
-
-        return User::create([
+        $user = new User;
+        $user->fill([
             'name'                => $pxUser->getName(),
             'nickname'            => $pxUser->getNickname(),
             'email'               => $pxUser->getEmail(),
             'user_id'             => $pxUser->getId(),
             'avatar'              => $pxUser->getAvatar(),
             'access_token'        => $pxUser->token,
-            'access_token_secret' => $pxUser->tokenSecret,
         ]);
+        $user->setAttribute('access_token_secret', $pxUser->tokenSecret);
+        $user->save();
     }
 }

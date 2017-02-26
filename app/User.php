@@ -9,6 +9,11 @@ class User extends Authenticatable
 {
 
     use Notifiable;
+    use EncryptsFields;
+
+    protected $encryptable = [
+        'access_token_secret'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +27,6 @@ class User extends Authenticatable
         'user_id',
         'avatar',
         'access_token',
-        'access_token_secret',
     ];
 
     /**
