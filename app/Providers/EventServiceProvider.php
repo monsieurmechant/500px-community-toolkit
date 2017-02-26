@@ -17,6 +17,9 @@ class EventServiceProvider extends ServiceProvider
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             'SocialiteProviders\FiveHundredPixel\FiveHundredPixelExtendSocialite@handle',
         ],
+        \App\Events\UserCreated::class => [
+            \App\Listeners\FetchUsersFollowers::class,
+        ],
     ];
 
     /**

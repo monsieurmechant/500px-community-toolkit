@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthController extends Controller
 {
@@ -50,19 +51,22 @@ class AuthController extends Controller
      */
     private function findOrCreateUser(\Laravel\Socialite\One\User $pxUser)
     {
-        if (null !== $authUser = User::where('user_id', $pxUser->id)->first()) {
-            return $authUser;
+        try {
+            return User::findOrFail($pxUser->id);
+        } catch(ModelNotFoundException $e) {
+            $user = new User;
+            $user->fill([
+                'id'           => $pxUser->getId(),
+                'name'         => $pxUser->getName(),
+                'nickname'     => $pxUser->getNickname(),
+                'email'        => $pxUser->getEmail(),
+                'avatar'       => $pxUser->getAvatar(),
+                'access_token' => $pxUser->token,
+            ]);
+            $user->setAttribute('access_token_secret', $pxUser->tokenSecret);
+            $user->save();
+
+            return $user;
         }
-        $user = new User;
-        $user->fill([
-            'name'                => $pxUser->getName(),
-            'nickname'            => $pxUser->getNickname(),
-            'email'               => $pxUser->getEmail(),
-            'user_id'             => $pxUser->getId(),
-            'avatar'              => $pxUser->getAvatar(),
-            'access_token'        => $pxUser->token,
-        ]);
-        $user->setAttribute('access_token_secret', $pxUser->tokenSecret);
-        $user->save();
     }
 }

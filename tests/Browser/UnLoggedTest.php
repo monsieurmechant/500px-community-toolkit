@@ -4,16 +4,17 @@ namespace Tests\Browser;
 
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class ExampleTest extends DuskTestCase
+class UnLoggedTest extends DuskTestCase
 {
     /**
-     * A basic browser test example.
+     * Tests that a user visiting the homepage
+     * is redirected to the login page
+     * when not authenticated.
      *
      * @return void
      */
-    public function testBasicExample()
+    public function testItSeesTheLoginButtonWhenNotAuthenticated()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')

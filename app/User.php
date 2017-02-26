@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\UserCreated;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -21,11 +22,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'nickname',
         'email',
-        'user_id',
         'avatar',
+        'access_token',
     ];
 
     /**
@@ -38,4 +40,21 @@ class User extends Authenticatable
         'access_token',
         'access_token_secret',
     ];
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $events = [
+        'created' => UserCreated::class,
+    ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function followers()
+    {
+        return $this->hasMany(\App\Account::class);
+    }
 }
