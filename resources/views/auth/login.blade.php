@@ -16,7 +16,7 @@
     <section class="hero is-large">
         <div class="hero-body">
             <div class="container has-text-centered">
-                <a class="button is-large is-outlined">
+                <a class="button is-large is-outlined" href="{{ route('auth-500px') }}">
                     <span class="icon is-medium">
                       <i class="fa fa-500px"></i>
                     </span>

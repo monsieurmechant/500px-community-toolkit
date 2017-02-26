@@ -1,17 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
-
-                <div class="panel-body">
-                    You are logged in!
-                </div>
+    <section class="hero is-success is-fullheight">
+        <div class="hero-head">
+        </div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">
+                    500px Community Toolkit
+                </h1>
+                <h2 class="subtitle">
+                    I don't know.
+                </h2>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 @endsection

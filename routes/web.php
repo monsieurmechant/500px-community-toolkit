@@ -13,11 +13,10 @@
 
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+    Route::get('/',  ['as' => 'home', 'uses' => 'HomeController@index']);
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');
+Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
+Route::get('auth/500px', ['as' => 'auth-500px', 'uses' => 'Auth\AuthController@redirectToProvider']);
+Route::get('auth/500px/callback', 'Auth\AuthController@handleProviderCallback');

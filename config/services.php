@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    '500px' => [
+        'client_id'     => env('500PX_KEY'),
+        'client_secret' => env('500PX_SECRET'),
+        'redirect'      => env('APP_URL') . env('500PX_REDIRECT'),
+    ],
 ];
