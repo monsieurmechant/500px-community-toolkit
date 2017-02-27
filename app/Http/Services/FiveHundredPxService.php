@@ -24,8 +24,9 @@ class FiveHundredPxService
     /**
      * FiveHundredPxService constructor.
      * @param User $user
+     * @return FiveHundredPxService
      */
-    public function authenticateClient(User $user)
+    public function authenticateClient(User $user):self
     {
         $stack = HandlerStack::create();
 
@@ -39,6 +40,8 @@ class FiveHundredPxService
             'base_uri' => self::API_URL,
             'handler'  => $stack
         ]);
+
+        return $this;
     }
 
 

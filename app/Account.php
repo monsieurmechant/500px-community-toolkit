@@ -46,6 +46,6 @@ class Account extends Model
      */
     public function followers()
     {
-        return $this->hasMany(\App\Account::class);
+        return $this->belongsToMany(\App\Account::class);
     }
 }
