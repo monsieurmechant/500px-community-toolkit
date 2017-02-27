@@ -54,23 +54,23 @@ class AuthController extends Controller
         try {
             $user = User::findOrFail($pxUser->id);
             $user->fill([
-                'name'      => $pxUser->getName(),
-                'username'  => $pxUser->getNickname(),
-                'email'     => $pxUser->getEmail(),
-                'avatar'    => $pxUser->getAvatar(),
-                'followers' => $pxUser->getRaw()['followers_count'],
+                'name'            => $pxUser->getName(),
+                'username'        => $pxUser->getNickname(),
+                'email'           => $pxUser->getEmail(),
+                'avatar'          => $pxUser->getAvatar(),
+                'followers_count' => $pxUser->getRaw()['followers_count'],
             ])->save();
             return User::find($pxUser->getId());
         } catch (ModelNotFoundException $e) {
             $user = new User;
             $user->fill([
-                'id'           => $pxUser->getId(),
-                'name'         => $pxUser->getName(),
-                'username'     => $pxUser->getNickname(),
-                'email'        => $pxUser->getEmail(),
-                'avatar'       => $pxUser->getAvatar(),
-                'followers'    => $pxUser->getRaw()['followers_count'],
-                'access_token' => $pxUser->token,
+                'id'              => $pxUser->getId(),
+                'name'            => $pxUser->getName(),
+                'username'        => $pxUser->getNickname(),
+                'email'           => $pxUser->getEmail(),
+                'avatar'          => $pxUser->getAvatar(),
+                'followers_count' => $pxUser->getRaw()['followers_count'],
+                'access_token'    => $pxUser->token,
             ]);
             $user->setAttribute('access_token_secret', $pxUser->tokenSecret);
             $user->save();

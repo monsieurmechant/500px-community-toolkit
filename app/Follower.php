@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Account extends Model
+class Follower extends Model
 {
 
     /**
@@ -24,7 +24,6 @@ class Account extends Model
         'id',
         'username',
         'name',
-        'email',
         'avatar',
         'followers',
         'affection',
@@ -44,8 +43,8 @@ class Account extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function followers()
+    public function users()
     {
-        return $this->belongsToMany(\App\Account::class);
+        return $this->belongsToMany(\App\User::class);
     }
 }

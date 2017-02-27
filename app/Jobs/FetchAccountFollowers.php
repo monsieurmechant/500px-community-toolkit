@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\User;
-use App\Account;
+use App\Follower;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -18,9 +18,9 @@ class FetchAccountFollowers implements ShouldQueue
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var int $accountId */
+    /** @var int $userId */
     private $userId;
-    /** @var array $accountId */
+    /** @var array collectedId */
     private $collectedIds = [];
 
     /**
@@ -74,14 +74,15 @@ class FetchAccountFollowers implements ShouldQueue
     private function saveFollowersPage(array $followers)
     {
         foreach ($followers as $follower) {
-            $this->collectedIds[] = $follower->id;
+            $this->collectedIds[] = (int)$follower->id;
             try {
-                /** @var Account $account */
-                $account = Account::findOrFail($follower->id);
+                /** @var Follower $account */
+                $account = Follower::findOrFail($follower->id);
                 if (!Carbon::now()->isSameDay($account->getAttribute('updated_at'))) {
                     $account->fill([
-                        'name'      => $follower->fullname,
-                        'avatar'    => $follower->userpic_url,
+                        'name'      => $follower->fullname ?? $account->getAttribute('name'),
+                        'avatar'    => $follower->userpic_url ?? $account->getAttribute('avatar'),
+                        'cover'     => $follower->cover_url ?? $account->getAttribute('cover'),
                         'followers' => $follower->followers_count,
                         'affection' => $follower->affection,
                     ]);
@@ -100,11 +101,12 @@ class FetchAccountFollowers implements ShouldQueue
      */
     private function persistFollower($follower)
     {
-        Account::create([
+        Follower::create([
             'id'        => $follower->id,
             'username'  => $follower->username ?? null,
             'name'      => $follower->fullname ?? null,
             'avatar'    => $follower->userpic_url ?? null,
+            'cover'     => $follower->cover_url ?? null,
             'followers' => (int)$follower->followers_count >= 0 ? (int)$follower->followers_count : 0,
             'affection' => (int)$follower->affection >= 0 ? (int)$follower->affection : 0,
         ]);

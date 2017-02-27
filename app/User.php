@@ -41,6 +41,7 @@ class User extends Authenticatable
         'email',
         'avatar',
         'access_token',
+        'followers_count',
     ];
 
     /**
@@ -73,10 +74,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
     public function followers()
     {
-        return $this->belongsToMany(\App\Account::class);
+        return $this->belongsToMany(\App\Follower::class);
     }
 }

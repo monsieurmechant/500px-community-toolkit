@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('avatar')->nullable();
-            $table->unsignedInteger('followers')->default(0);
+            $table->unsignedInteger('followers_count')->default(0);
             $table->string('access_token')->unique();
             $table->string('access_token_secret', 1024);
 

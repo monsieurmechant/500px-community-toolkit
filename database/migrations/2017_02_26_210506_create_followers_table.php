@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccountsTable extends Migration
+class CreateFollowersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('followers', function (Blueprint $table) {
             $table->unsignedInteger('id')->unique();
             $table->string('username')->nullable();
             $table->string('name')->nullable();
-            $table->string('email')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('cover')->nullable();
             $table->unsignedInteger('followers')->default(0);
             $table->unsignedInteger('affection')->default(0);
 
             $table->timestamps();
+
+            $table->index(['followers', 'affection']);
         });
     }
 
@@ -33,6 +35,6 @@ class CreateAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('followers');
     }
 }

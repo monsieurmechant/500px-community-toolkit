@@ -20,7 +20,19 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token'      => str_random(10),
         'username'            => $faker->userName,
         'avatar'              => "http://fillmurray.com/200/200",
+        'followers_count'     => $faker->numberBetween(0, 2000000),
         'access_token'        => str_random(10),
         'access_token_secret' => str_random(10),
+    ];
+});
+
+$factory->define(App\Follower::class, function (Faker\Generator $faker) {
+    return [
+        'id'        => $faker->randomNumber(8),
+        'name'      => $faker->name,
+        'username'  => $faker->userName,
+        'avatar'    => "http://fillmurray.com/200/200",
+        'followers' => $faker->numberBetween(0, 2000000),
+        'affection' => $faker->numberBetween(0, 6000000),
     ];
 });

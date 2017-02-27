@@ -9,7 +9,7 @@
 namespace Tests\Unit\Jobs;
 
 
-use App\Account;
+use App\Follower;
 use Carbon\Carbon;
 use Mockery as m;
 use Tests\TestCase;
@@ -51,7 +51,6 @@ class FetchAccountFollowersTest extends TestCase
     {
         \App\User::unsetEventDispatcher();
         $user = factory(\App\User::class)->create();
-
         $this->assertEquals(0, count($user->followers));
 
         $apiService = m::mock(\App\Http\Services\FiveHundredPxService::class);
@@ -73,7 +72,7 @@ class FetchAccountFollowersTest extends TestCase
     {
         $callResponse = new FiveHundredPxUsersFollowersCall(5, 1, 1);
 
-        Account::create([
+        Follower::create([
             'id'        => $callResponse->followers[0]->id,
             'username'  => $callResponse->followers[0]->username ?? null,
             'name'      => $callResponse->followers[0]->fullname ?? null,
@@ -82,7 +81,7 @@ class FetchAccountFollowersTest extends TestCase
             'affection' => $callResponse->followers[0]->affection ?? 0,
         ]);
 
-        Account::create([
+        Follower::create([
             'id'        => $callResponse->followers[1]->id,
             'username'  => $callResponse->followers[1]->username ?? null,
             'name'      => $callResponse->followers[1]->fullname ?? null,
@@ -91,10 +90,10 @@ class FetchAccountFollowersTest extends TestCase
             'affection' => $callResponse->followers[1]->affection ?? 0,
         ]);
 
-        $account = Account::find($callResponse->followers[0]->id);
-        $this->assertEquals($callResponse->followers[0]->followers_count, $account->getAttribute('followers'));
+        $follower = Follower::find($callResponse->followers[0]->id);
+        $this->assertEquals($callResponse->followers[0]->followers_count, $follower->getAttribute('followers'));
 
-        $account->setAttribute('updated_at', Carbon::yesterday()->subDay()->toDateString())
+        $follower->setAttribute('updated_at', Carbon::yesterday()->subDay()->toDateString())
             ->save();
 
         $callResponse->followers[0]->setFollowersCount(12345678);
@@ -112,8 +111,8 @@ class FetchAccountFollowersTest extends TestCase
 
         (new FetchAccountFollowers($user->getAttribute('id')))->handle($apiService);
 
-        $this->assertEquals(12345678, Account::find($callResponse->followers[0]->id)->getAttribute('followers'));
-        $this->assertNotEquals(87654321, Account::find($callResponse->followers[1]->id)->getAttribute('followers'));
+        $this->assertEquals(12345678, Follower::find($callResponse->followers[0]->id)->getAttribute('followers'));
+        $this->assertNotEquals(87654321, Follower::find($callResponse->followers[1]->id)->getAttribute('followers'));
     }
 
     public function testItZeroesNegativeAffectionAndFollowers()
@@ -134,7 +133,7 @@ class FetchAccountFollowersTest extends TestCase
 
         (new FetchAccountFollowers($user->getAttribute('id')))->handle($apiService);
 
-        $this->assertEquals(0, Account::find($callResponse->followers[0]->id)->getAttribute('followers'));
-        $this->assertEquals(0, Account::find($callResponse->followers[1]->id)->getAttribute('affection'));
+        $this->assertEquals(0, Follower::find($callResponse->followers[0]->id)->getAttribute('followers'));
+        $this->assertEquals(0, Follower::find($callResponse->followers[1]->id)->getAttribute('affection'));
     }
 }

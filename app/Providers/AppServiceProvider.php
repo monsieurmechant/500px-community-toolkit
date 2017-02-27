@@ -29,5 +29,11 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);
         }
+        $this->app->bind(\App\Services\Api\CreateApiDataFromCollection::class, function ($app) {
+            return new \App\Services\Api\CreateApiDataFromCollection($app[\League\Fractal\Manager::class]);
+        });
+        $this->app->bind(\App\Services\Api\CreateApiDataFromModel::class, function ($app) {
+            return new \App\Services\Api\CreateApiDataFromModel($app[\League\Fractal\Manager::class]);
+        });
     }
 }
