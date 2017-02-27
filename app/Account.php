@@ -8,31 +8,26 @@ class Account extends Model
 {
 
     /**
+     * Since we are using the 500px ID as primary.
+     * The 'id' field should not increment.
+     *
+     * @var bool $incrementing
+     */
+    public $incrementing = false;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'user_id',
-        'nickname',
+        'id',
+        'username',
         'name',
         'email',
         'avatar',
         'followers',
         'affection',
-    ];
-
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'followed_at',
     ];
 
     /**
@@ -41,6 +36,7 @@ class Account extends Model
      * @var array
      */
     protected $casts = [
+        'id'        => 'integer',
         'followers' => 'integer',
         'affection' => 'integer',
     ];

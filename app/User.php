@@ -12,6 +12,19 @@ class User extends Authenticatable
     use Notifiable;
     use EncryptsFields;
 
+    /**
+     * Since we are using the 500px ID as primary.
+     * The 'id' field should not increment.
+     *
+     * @var bool $incrementing
+     */
+    public $incrementing = false;
+
+    /**
+     * The attributes that should be encrypted on the fly.
+     *
+     * @var array
+     */
     protected $encryptable = [
         'access_token_secret'
     ];
@@ -24,7 +37,7 @@ class User extends Authenticatable
     protected $fillable = [
         'id',
         'name',
-        'nickname',
+        'username',
         'email',
         'avatar',
         'access_token',
@@ -39,6 +52,15 @@ class User extends Authenticatable
         'remember_token',
         'access_token',
         'access_token_secret',
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
     ];
 
     /**

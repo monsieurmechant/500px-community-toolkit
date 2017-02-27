@@ -53,12 +53,12 @@ class AuthController extends Controller
     {
         try {
             return User::findOrFail($pxUser->id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             $user = new User;
             $user->fill([
                 'id'           => $pxUser->getId(),
                 'name'         => $pxUser->getName(),
-                'nickname'     => $pxUser->getNickname(),
+                'username'     => $pxUser->getNickname(),
                 'email'        => $pxUser->getEmail(),
                 'avatar'       => $pxUser->getAvatar(),
                 'access_token' => $pxUser->token,
@@ -66,7 +66,7 @@ class AuthController extends Controller
             $user->setAttribute('access_token_secret', $pxUser->tokenSecret);
             $user->save();
 
-            return $user;
+            return User::find($pxUser->getId());
         }
     }
 }

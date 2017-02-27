@@ -102,27 +102,4 @@ class FiveHundredPxService
         return json_decode($request->getBody());
 
     }
-
-    /**
-     * Serializes a user endpoint result
-     * to an Eloquent model.
-     *
-     * @param $follow
-     * @return \App\FiveHundredPxFollow
-     */
-    public function serializeFollow(\stdClass $follow, FiveHundredPxUser $user)
-    {
-        $fiveHundredFollow = new \App\FiveHundredPxFollow();
-        $fiveHundredFollow->follow_id = $follow->id;
-        $fiveHundredFollow->name = $follow->fullname ?? null;
-        $fiveHundredFollow->nickname = $follow->username ?? null;
-        $fiveHundredFollow->avatar = $follow->userpic_url ?? null;
-        $fiveHundredFollow->email = $follow->email ?? null;
-        $fiveHundredFollow->fiveHundredUser()->associate($user);
-        $fiveHundredFollow->save();
-
-        return $fiveHundredFollow;
-    }
-
-
 }

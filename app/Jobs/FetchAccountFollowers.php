@@ -2,11 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Account;
 use App\User;
+use App\Account;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use App\Exceptions\JobDoneException;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Http\Services\FiveHundredPxService;
@@ -21,6 +20,8 @@ class FetchAccountFollowers implements ShouldQueue
 
     /** @var int $accountId */
     private $userId;
+    /** @var array $accountId */
+    private $collectedIds = [];
 
     /**
      * Create a new job instance.
@@ -47,7 +48,7 @@ class FetchAccountFollowers implements ShouldQueue
 
         $client->authenticateClient($user);
         $pages = 1;
-        $collectedIds = [];
+        $this->collectedIds = [];
         for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
             $follows = $client->get(
                 'users/' . $user->id . '/followers',
@@ -58,10 +59,9 @@ class FetchAccountFollowers implements ShouldQueue
                 $pages = $follows->followers_pages;
             }
 
-            $collectedIds = array_merge($collectedIds, $this->saveFollowersPage($follows->followers));
+            $this->saveFollowersPage($follows->followers);
         }
-
-        $user->followers()->sync($collectedIds);
+        $user->followers()->sync($this->collectedIds);
 
     }
 
@@ -69,26 +69,28 @@ class FetchAccountFollowers implements ShouldQueue
      * Persists all the followers to the Database
      *
      * @param array $followers
-     * @return array An array of IDs
+     * @return void
      */
     private function saveFollowersPage(array $followers)
     {
-        $collectedIds = [];
         foreach ($followers as $follower) {
-            $collectedIds[] = $follower->id;
+            $this->collectedIds[] = $follower->id;
             try {
                 /** @var Account $account */
                 $account = Account::findOrFail($follower->id);
                 if (!Carbon::now()->isSameDay($account->getAttribute('updated_at'))) {
-                    $account->setAttribute('followers', $follower->followers);
-                    $account->setAttribute('affection', $follower->affection);
+                    $account->fill([
+                        'name'      => $follower->fullname,
+                        'avatar'    => $follower->userpic_url,
+                        'followers' => $follower->followers_count,
+                        'affection' => $follower->affection,
+                    ]);
                     $account->save();
                 }
             } catch (ModelNotFoundException $e) {
-                $this->persistFollower($follower, $account);
+                $this->persistFollower($follower);
             }
         }
-        return $collectedIds;
     }
 
     /**
@@ -99,12 +101,12 @@ class FetchAccountFollowers implements ShouldQueue
     private function persistFollower($follower)
     {
         Account::create([
-            'id'=> $follower->id,
-            'nickname'=> $follower->nickname,
-            'name'=> $follower->fullname,
-            'avatar'=> $follower->userpic_url,
-            'followers'=> $follower->followers,
-            'affection'=> $follower->affection,
+            'id'        => $follower->id,
+            'username'  => $follower->username ?? null,
+            'name'      => $follower->fullname ?? null,
+            'avatar'    => $follower->userpic_url ?? null,
+            'followers' => $follower->followers_count ?? 0,
+            'affection' => $follower->affection ?? 0,
         ]);
     }
 }
