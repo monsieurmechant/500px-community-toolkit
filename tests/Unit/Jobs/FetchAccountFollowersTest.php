@@ -115,4 +115,26 @@ class FetchAccountFollowersTest extends TestCase
         $this->assertEquals(12345678, Account::find($callResponse->followers[0]->id)->getAttribute('followers'));
         $this->assertNotEquals(87654321, Account::find($callResponse->followers[1]->id)->getAttribute('followers'));
     }
+
+    public function testItZeroesNegativeAffectionAndFollowers()
+    {
+        $callResponse = new FiveHundredPxUsersFollowersCall(5, 1, 1);
+        $callResponse->followers[0]->setFollowersCount(-2);
+        $callResponse->followers[1]->setAffection(-2);
+
+        \App\User::unsetEventDispatcher();
+        $user = factory(\App\User::class)->create();
+
+        $apiService = m::mock(\App\Http\Services\FiveHundredPxService::class);
+        $apiService->shouldReceive('authenticateClient')->once()->withAnyArgs()->andReturnSelf();
+        $apiService->shouldReceive('get')->once()->with(
+            'users/' . $user->getAttribute('id') . '/followers',
+            ['query' => ['rpp' => 100, 'page' => 1]]
+        )->andReturn($callResponse);
+
+        (new FetchAccountFollowers($user->getAttribute('id')))->handle($apiService);
+
+        $this->assertEquals(0, Account::find($callResponse->followers[0]->id)->getAttribute('followers'));
+        $this->assertEquals(0, Account::find($callResponse->followers[1]->id)->getAttribute('affection'));
+    }
 }

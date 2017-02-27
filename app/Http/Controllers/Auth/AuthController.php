@@ -52,7 +52,15 @@ class AuthController extends Controller
     private function findOrCreateUser(\Laravel\Socialite\One\User $pxUser)
     {
         try {
-            return User::findOrFail($pxUser->id);
+            $user = User::findOrFail($pxUser->id);
+            $user->fill([
+                'name'      => $pxUser->getName(),
+                'username'  => $pxUser->getNickname(),
+                'email'     => $pxUser->getEmail(),
+                'avatar'    => $pxUser->getAvatar(),
+                'followers' => $pxUser->getRaw()['followers_count'],
+            ])->save();
+            return User::find($pxUser->getId());
         } catch (ModelNotFoundException $e) {
             $user = new User;
             $user->fill([
@@ -61,6 +69,7 @@ class AuthController extends Controller
                 'username'     => $pxUser->getNickname(),
                 'email'        => $pxUser->getEmail(),
                 'avatar'       => $pxUser->getAvatar(),
+                'followers'    => $pxUser->getRaw()['followers_count'],
                 'access_token' => $pxUser->token,
             ]);
             $user->setAttribute('access_token_secret', $pxUser->tokenSecret);

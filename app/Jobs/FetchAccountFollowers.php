@@ -105,8 +105,8 @@ class FetchAccountFollowers implements ShouldQueue
             'username'  => $follower->username ?? null,
             'name'      => $follower->fullname ?? null,
             'avatar'    => $follower->userpic_url ?? null,
-            'followers' => $follower->followers_count ?? 0,
-            'affection' => $follower->affection ?? 0,
+            'followers' => (int)$follower->followers_count >= 0 ? (int)$follower->followers_count : 0,
+            'affection' => (int)$follower->affection >= 0 ? (int)$follower->affection : 0,
         ]);
     }
 }
