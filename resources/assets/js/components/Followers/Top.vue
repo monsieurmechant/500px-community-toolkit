@@ -1,15 +1,15 @@
 <template>
   <div class="followers-top">
     <div class="tabs is-centered">
-      <ul>
+      <ul class="followers-top__sort">
         <li :class="[sort === 'followers' ? 'is-active' : '']">
-          <a @click="sortByFollowers()">
+          <a @click="sortByFollowers()" :disabled="sort === 'followers'">
             <span class="icon is-small"><i class="fa fa-users"></i></span>
             <span>Top 50 by Followers</span>
           </a>
         </li>
         <li :class="[sort === 'affection' ? 'is-active' : '']">
-          <a @click="sortByAffection()">
+          <a @click="sortByAffection()" :disabled="sort === 'followers'">
             <span class="icon is-small"><i class="fa fa-heart"></i></span>
             <span>Top 50 by Affection</span>
           </a>
@@ -34,7 +34,7 @@
       </tr>
       </tfoot>
       <tbody>
-      <template v-for="(follower, i) in followers">
+      <template v-for="(follower, i) in followers" v-if="!loading">
         <tr @click="showProfileDetails(i+1)" class="follower-row">
           <td>{{ i + 1 }}</td>
           <td><a :href="`http://500px.com/${follower.username}`">{{ follower.name }}</a></td>
@@ -47,6 +47,12 @@
           </td>
         </tr>
       </template>
+      <tr v-if="loading">
+        <td colspan="4">
+          <Loader></Loader>
+        </td>
+      </tr>
+
       </tbody>
     </table>
   </div>
@@ -54,7 +60,9 @@
 
 <script>
     import Axios from 'axios';
+    import Loader from '../UI/InlineLoader';
     import FullProfileCard from './FullProfileCard';
+
     export default {
         name: 'Followers-Top',
         data:  function () {
@@ -98,6 +106,7 @@
         },
         components: {
           FullProfileCard,
+          Loader,
         },
         mounted() {
           this.fetchFollowers();
@@ -109,6 +118,11 @@
   .followers-top {
     tbody tr.follower-row {
       cursor: pointer;
+    }
+    .followers-top__sort {
+      li.is-active a {
+        cursor: default;
+      }
     }
   }
 </style>
