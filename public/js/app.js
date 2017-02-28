@@ -1895,25 +1895,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       detailsRow: 0,
       followers: [],
-      loading: true
+      loading: true,
+      sort: 'followers'
     };
   },
   methods: {
     showProfileDetails: function showProfileDetails(row) {
       this.detailsRow = this.detailsRow === row ? 0 : row;
+    },
+    fetchFollowers: function fetchFollowers() {
+      var _this = this;
+
+      this.loading = true;
+      this.detailsRow = 0;
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/internal/followers', {
+        params: {
+          'order-by': this.sort
+        }
+      }).then(function (response) {
+        _this.followers = response.data.data;
+        _this.loading = false;
+      }).catch();
+    },
+    sortByFollowers: function sortByFollowers() {
+      if (this.sort === 'followers') {
+        return;
+      }
+      this.sort = 'followers';
+      this.fetchFollowers();
+    },
+    sortByAffection: function sortByAffection() {
+      if (this.sort === 'affection') {
+        return;
+      }
+      this.sort = 'affection';
+      this.fetchFollowers();
     }
   },
   components: {
     FullProfileCard: __WEBPACK_IMPORTED_MODULE_1__FullProfileCard___default.a
   },
   mounted: function mounted() {
-    var _this = this;
-
-    this.loading = true;
-    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/internal/followers').then(function (response) {
-      _this.followers = response.data.data;
-      _this.loading = false;
-    }).catch();
+    this.fetchFollowers();
   }
 };
 
@@ -19148,9 +19171,27 @@ module.exports = function normalizeComponent (
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "followers-top"
-  }, [_vm._m(0), _vm._v(" "), _c('table', {
+  }, [_c('div', {
+    staticClass: "tabs is-centered"
+  }, [_c('ul', [_c('li', {
+    class: [_vm.sort === 'followers' ? 'is-active' : '']
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.sortByFollowers()
+      }
+    }
+  }, [_vm._m(0), _vm._v(" "), _c('span', [_vm._v("Top 50 by Followers")])])]), _vm._v(" "), _c('li', {
+    class: [_vm.sort === 'affection' ? 'is-active' : '']
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.sortByAffection()
+      }
+    }
+  }, [_vm._m(1), _vm._v(" "), _c('span', [_vm._v("Top 50 by Affection")])])])])]), _vm._v(" "), _c('table', {
     staticClass: "table"
-  }, [_vm._m(1), _vm._v(" "), _c('tfoot', [_c('tr', [_c('th', [_c('abbr', {
+  }, [_vm._m(2), _vm._v(" "), _c('tfoot', [_c('tr', [_c('th', [_c('abbr', {
     attrs: {
       "title": "Position"
     }
@@ -19185,19 +19226,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })], 1)]) : _vm._e()]
   })], 2)], 1)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "tabs is-centered"
-  }, [_c('ul', [_c('li', {
-    staticClass: "is-active"
-  }, [_c('a', [_c('span', {
+  return _c('span', {
     staticClass: "icon is-small"
   }, [_c('i', {
     staticClass: "fa fa-users"
-  })]), _vm._v(" "), _c('span', [_vm._v("Top 50 by Followers")])])]), _vm._v(" "), _c('li', [_c('a', [_c('span', {
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
     staticClass: "icon is-small"
   }, [_c('i', {
     staticClass: "fa fa-heart"
-  })]), _vm._v(" "), _c('span', [_vm._v("Top 50 by Affection")])])])])])
+  })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', [_c('abbr', {
     attrs: {

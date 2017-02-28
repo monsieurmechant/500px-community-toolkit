@@ -2,14 +2,14 @@
   <div class="followers-top">
     <div class="tabs is-centered">
       <ul>
-        <li class="is-active">
-          <a>
+        <li :class="[sort === 'followers' ? 'is-active' : '']">
+          <a @click="sortByFollowers()">
             <span class="icon is-small"><i class="fa fa-users"></i></span>
             <span>Top 50 by Followers</span>
           </a>
         </li>
-        <li>
-          <a>
+        <li :class="[sort === 'affection' ? 'is-active' : '']">
+          <a @click="sortByAffection()">
             <span class="icon is-small"><i class="fa fa-heart"></i></span>
             <span>Top 50 by Affection</span>
           </a>
@@ -62,22 +62,45 @@
             detailsRow: 0,
             followers: [],
             loading: true,
+            sort: 'followers',
           }
         },
         methods: {
           showProfileDetails(row) {
             this.detailsRow = this.detailsRow === row ? 0:row;
           },
+          fetchFollowers() {
+            this.loading = true;
+            this.detailsRow = 0;
+            Axios.get('/internal/followers', {
+              params: {
+                'order-by': this.sort
+              }
+            }).then(response => {
+              this.followers = response.data.data;
+              this.loading = false;
+            }).catch();
+          },
+          sortByFollowers() {
+            if (this.sort === 'followers') {
+              return
+            }
+            this.sort = 'followers';
+            this.fetchFollowers();
+          },
+          sortByAffection() {
+            if (this.sort === 'affection') {
+              return
+            }
+            this.sort = 'affection';
+            this.fetchFollowers();
+          },
         },
         components: {
           FullProfileCard,
         },
         mounted() {
-          this.loading = true;
-          Axios.get('/internal/followers').then(response => {
-            this.followers = response.data.data;
-            this.loading = false;
-          }).catch();
+          this.fetchFollowers();
         }
     }
 </script>
