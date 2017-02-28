@@ -33,7 +33,7 @@ class FollowersController extends InternalApiController
      * @param GetFollowerProfileRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id, GetFollowerProfileRequest $request)
+    public function show(int $id, GetFollowerProfileRequest $request)
     {
         if (!(bool)$request->input('full')) {
             try {
