@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\InternalApi;
 
-use Illuminate\Http\Request;
+use App\Jobs\GetFullFollowerProfile;
 use App\Http\Requests\GetFollowersRequest;
+use App\Http\Requests\GetFollowerProfileRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FollowersController extends InternalApiController
@@ -29,18 +30,23 @@ class FollowersController extends InternalApiController
      * Display the specified resource.
      *
      * @param  int $id
-     * @param Request $request
+     * @param GetFollowerProfileRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id, Request $request)
+    public function show($id, GetFollowerProfileRequest $request)
     {
-
-        try {
-            $follower = \App\Follower::findOrFail($id);
-            return $this->returnItem($follower, 200);
-        } catch (ModelNotFoundException $e) {
-            return $this->returnError(404, 'This account does not exist.', 'ModelNotFoundException');
+        if (!(bool)$request->input('full')) {
+            try {
+                $follower = \App\Follower::findOrFail($id);
+                return $this->returnItem($follower, 200);
+            } catch (ModelNotFoundException $e) {
+                return $this->returnError(404, 'This account does not exist.', 'ModelNotFoundException');
+            }
         }
+
+        return response()->json(
+            resolve(\App\Http\Services\Requests\GetFullFollowerProfile::class)->handle($id, $request->user())
+        , 200);
 
     }
 }

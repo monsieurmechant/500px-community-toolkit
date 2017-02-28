@@ -1911,23 +1911,57 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
   name: 'Followers-Top',
   data: function data() {
     return {
+      details: {
+        row: 0,
+        profile: {}
+      },
       followers: [],
       loading: true
     };
   },
+  methods: {
+    showProfileDetails: function showProfileDetails(row, id) {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/internal/followers/' + id + '?full=1').then(function (response) {
+        _this.details.profile = response.data.user;
+        _this.details.row = _this.details.row === row ? 0 : row;
+      }).catch();
+    }
+  },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     this.loading = true;
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/internal/followers').then(function (response) {
-      _this.followers = response.data.data;
-      _this.loading = false;
+      _this2.followers = response.data.data;
+      _this2.loading = false;
     }).catch();
   }
 };
@@ -19174,11 +19208,69 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "title": "Affection"
     }
   }, [_vm._v("Affection")])])])]), _vm._v(" "), _c('tbody', [_vm._l((_vm.followers), function(follower, i) {
-    return [_c('tr', [_c('td', [_vm._v(_vm._s(i + 1))]), _vm._v(" "), _c('td', [_c('a', {
+    return [_c('tr', {
+      on: {
+        "click": function($event) {
+          _vm.showProfileDetails(i + 1, follower.id)
+        }
+      }
+    }, [_c('td', [_vm._v(_vm._s(i + 1))]), _vm._v(" "), _c('td', [_c('a', {
       attrs: {
         "href": ("http://500px.com/" + (follower.username))
       }
-    }, [_vm._v(_vm._s(follower.name))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(follower.followers_count))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(follower.affection))])]), _vm._v(" "), _c('tr', [_vm._m(2, true)])]
+    }, [_vm._v(_vm._s(follower.name))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(follower.followers_count))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(follower.affection))])]), _vm._v(" "), (_vm.details.row === i + 1) ? _c('tr', [_c('td', {
+      attrs: {
+        "colspan": "4"
+      }
+    }, [_c('div', {
+      staticClass: "card"
+    }, [(_vm.details.profile.cover_url) ? _c('div', {
+      staticClass: "card-image"
+    }, [_c('figure', {
+      staticClass: "image is-2by1"
+    }, [_c('img', {
+      attrs: {
+        "src": _vm.details.profile.cover_url,
+        "alt": "Image"
+      }
+    })])]) : _vm._e(), _vm._v(" "), _c('div', {
+      staticClass: "card-content"
+    }, [_c('div', {
+      staticClass: "media"
+    }, [_c('div', {
+      staticClass: "media-left"
+    }, [_c('figure', {
+      staticClass: "image",
+      staticStyle: {
+        "height": "40px",
+        "width": "40px"
+      }
+    }, [_c('img', {
+      attrs: {
+        "src": _vm.details.profile.avatars.small.https,
+        "alt": "Image"
+      }
+    })])]), _vm._v(" "), _c('div', {
+      staticClass: "media-content"
+    }, [_c('p', {
+      staticClass: "title is-4"
+    }, [_vm._v("\n                    " + _vm._s(_vm.details.profile.fullname) + "\n                  ")]), _vm._v(" "), _c('p', {
+      staticClass: "subtitle is-6"
+    }, [_c('a', {
+      attrs: {
+        "href": ("http://500px.com/" + (follower.username))
+      }
+    }, [_vm._m(2, true), _vm._v(" @" + _vm._s(_vm.details.profile.username) + "\n                    ")])])])]), _vm._v(" "), _c('div', {
+      staticClass: "content has-text-centered"
+    }, [_c('p', [_vm._v(_vm._s(_vm.details.profile.about))]), _vm._v(" "), _c('br'), _vm._v(" "), _c('span', {
+      staticClass: "tag is-info is-large"
+    }, [_vm._m(3, true), _vm._v("\n                  " + _vm._s(_vm.details.profile.followers_count) + "\n                ")]), _vm._v(" "), _c('span', {
+      staticClass: "tag is-info is-large"
+    }, [_vm._m(4, true), _vm._v("\n                  " + _vm._s(_vm.details.profile.affection) + "\n                ")]), _vm._v(" "), (_vm.details.profile.following) ? _c('span', {
+      staticClass: "tag is-info is-large"
+    }, [_vm._m(5, true), _vm._v("\n                  Followed Back\n                ")]) : _vm._e(), _vm._v(" "), (!_vm.details.profile.following) ? _c('span', {
+      staticClass: "tag is-info is-large"
+    }, [_vm._m(6, true), _vm._v("\n                  Not Followed\n                ")]) : _vm._e()])])])])]) : _vm._e()]
   })], 2)], 1)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
@@ -19209,47 +19301,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Affection")])])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('td', {
-    attrs: {
-      "colspan": "4"
-    }
-  }, [_c('div', {
-    staticClass: "card"
-  }, [_c('div', {
-    staticClass: "card-image"
-  }, [_c('figure', {
-    staticClass: "image is-4by3"
-  }, [_c('img', {
-    attrs: {
-      "src": "http://bulma.io/images/placeholders/1280x960.png",
-      "alt": "Image"
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "card-content"
-  }, [_c('div', {
-    staticClass: "media"
-  }, [_c('div', {
-    staticClass: "media-left"
-  }, [_c('figure', {
-    staticClass: "image",
-    staticStyle: {
-      "height": "40px",
-      "width": "40px"
-    }
-  }, [_c('img', {
-    attrs: {
-      "src": "http://bulma.io/images/placeholders/96x96.png",
-      "alt": "Image"
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "media-content"
-  }, [_c('p', {
-    staticClass: "title is-4"
-  }, [_vm._v("John Smith")]), _vm._v(" "), _c('p', {
-    staticClass: "subtitle is-6"
-  }, [_vm._v("@johnsmith")])])]), _vm._v(" "), _c('div', {
-    staticClass: "content"
-  }, [_vm._v("\n                Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n                Phasellus nec iaculis mauris. "), _c('a', [_vm._v("@bulmaio")]), _vm._v(".\n                "), _c('a', [_vm._v("#css")]), _vm._v(" "), _c('a', [_vm._v("#responsive")]), _vm._v(" "), _c('br'), _vm._v(" "), _c('small', [_vm._v("11:09 PM - 1 Jan 2016")])])])])])
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-500px"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-users"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-heart"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-user-plus"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-user-times"
+  })])
 }]}
 module.exports.render._withStripped = true
 if (false) {
