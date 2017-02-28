@@ -30,7 +30,7 @@
 <div class="container">
     <nav class="nav">
         <div class="nav-left">
-            <a class="nav-item is-brand" href="http://bulma.io">
+            <a class="nav-item is-brand" href="{{ route('home') }}">
                 <span class="icon">
                     <i class="fa fa-wrench"></i>
                 </span>
@@ -39,7 +39,7 @@
         </div>
 
         <div id="nav-menu" class="nav-right nav-menu">
-            <a class="nav-item " href="#">
+            <a class="nav-item " href="{{ route('followers') }}">
                 My Community
             </a>
 

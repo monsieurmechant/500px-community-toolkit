@@ -28028,6 +28028,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -28164,7 +28224,45 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "title"
   }, [_vm._v(_vm._s(_vm.follower.galleries_count))])])])]), _vm._v(" "), _c('div', {
     staticClass: "content has-text-centered"
-  }, [(_vm.follower.about) ? _c('p', [_vm._v(_vm._s(_vm.follower.about))]) : _vm._e()])])] : _c('Loader')], 2)
+  }, [(_vm.follower.about) ? _c('p', [_vm._v(_vm._s(_vm.follower.about))]) : _vm._e()])]), _vm._v(" "), _c('div', {
+    staticClass: "card-footer"
+  }, [_c('a', {
+    staticClass: "card-footer-item",
+    attrs: {
+      "href": ("https://500px.com/" + (_vm.follower.username)),
+      "target": "_blank"
+    }
+  }, [_vm._m(5)]), _vm._v(" "), (_vm.follower.contacts.website) ? _c('a', {
+    staticClass: "card-footer-item",
+    attrs: {
+      "href": ("http://" + (_vm.follower.contacts.website)),
+      "target": "_blank"
+    }
+  }, [_vm._m(6)]) : _vm._e(), _vm._v(" "), (_vm.follower.contacts.facebookpage) ? _c('a', {
+    staticClass: "card-footer-item",
+    attrs: {
+      "href": ("https://" + (_vm.follower.contacts.facebookpage)),
+      "target": "_blank"
+    }
+  }, [_vm._m(7)]) : _vm._e(), _vm._v(" "), (_vm.follower.contacts.flickr) ? _c('a', {
+    staticClass: "card-footer-item",
+    attrs: {
+      "href": ("https://flickr.com/" + (_vm.follower.contacts.flickr)),
+      "target": "_blank"
+    }
+  }, [_vm._m(8)]) : _vm._e(), _vm._v(" "), (_vm.follower.contacts.twitter) ? _c('a', {
+    staticClass: "card-footer-item",
+    attrs: {
+      "href": ("https://twitter.com/" + (_vm.follower.contacts.twitter)),
+      "target": "_blank"
+    }
+  }, [_vm._m(9)]) : _vm._e(), _vm._v(" "), (_vm.follower.contacts.facebook) ? _c('a', {
+    staticClass: "card-footer-item",
+    attrs: {
+      "href": ("https://facebook.com/" + (_vm.follower.contacts.facebook)),
+      "target": "_blank"
+    }
+  }, [_vm._m(10)]) : _vm._e()])] : _c('Loader')], 2)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('span', {
     staticClass: "icon is-small"
@@ -28195,6 +28293,66 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('i', {
     staticClass: "fa fa-picture-o"
   })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('abbr', {
+    attrs: {
+      "title": "500px Profile"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-500px"
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('abbr', {
+    attrs: {
+      "title": "Website"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-globe"
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('abbr', {
+    attrs: {
+      "title": "Facebook Page"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-facebook-official"
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('abbr', {
+    attrs: {
+      "title": "Flickr Profile"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-flickr"
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('abbr', {
+    attrs: {
+      "title": "Twitter Profile"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-twitter"
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('abbr', {
+    attrs: {
+      "title": "Facebook Profile"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-facebook"
+  })])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

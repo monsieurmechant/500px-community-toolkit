@@ -24,7 +24,6 @@
               <a :href="`http://500px.com/${follower.username}`">
                 <span class="icon is-small"><i class="fa fa-500px"></i></span> {{ follower.username }}
               </a>
-
             </p>
           </div>
         </div>
@@ -57,6 +56,67 @@
         <div class="content has-text-centered">
           <p v-if="follower.about">{{ follower.about }}</p>
         </div>
+      </div>
+      <div class="card-footer">
+        <a :href="`https://500px.com/${follower.username}`"
+           class="card-footer-item"
+           target="_blank">
+          <span class="icon is-small">
+            <abbr title="500px Profile">
+              <i class="fa fa-500px"></i>
+            </abbr>
+          </span>
+        </a>
+        <a :href="`http://${follower.contacts.website}`"
+           class="card-footer-item"
+           v-if="follower.contacts.website"
+           target="_blank">
+          <span class="icon is-small">
+            <abbr title="Website">
+              <i class="fa fa-globe"></i>
+            </abbr>
+          </span>
+        </a>
+        <a :href="`https://${follower.contacts.facebookpage}`"
+           class="card-footer-item"
+           v-if="follower.contacts.facebookpage"
+           target="_blank">
+          <span class="icon is-small">
+            <abbr title="Facebook Page">
+              <i class="fa fa-facebook-official"></i>
+            </abbr>
+          </span>
+        </a>
+        <a :href="`https://flickr.com/${follower.contacts.flickr}`"
+           class="card-footer-item"
+           v-if="follower.contacts.flickr"
+           target="_blank">
+          <span class="icon is-small">
+            <abbr title="Flickr Profile">
+              <i class="fa fa-flickr"></i>
+            </abbr>
+          </span>
+        </a>
+        <a :href="`https://twitter.com/${follower.contacts.twitter}`"
+           class="card-footer-item"
+           v-if="follower.contacts.twitter"
+           target="_blank">
+          <span class="icon is-small">
+            <abbr title="Twitter Profile">
+              <i class="fa fa-twitter"></i>
+            </abbr>
+          </span>
+        </a>
+        <a :href="`https://facebook.com/${follower.contacts.facebook}`"
+           class="card-footer-item"
+           v-if="follower.contacts.facebook"
+           target="_blank">
+          <span class="icon is-small">
+            <abbr title="Facebook Profile">
+              <i class="fa fa-facebook"></i>
+            </abbr>
+          </span>
+        </a>
       </div>
     </template>
     <Loader v-else></Loader>
