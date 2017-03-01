@@ -13,6 +13,8 @@
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "league/fractal": "^0.15.0",
+        "pda/pheanstalk": "~3.0",
+        "predis/predis": "~1.0",
         "socialiteproviders/500px": "^3.0",
         "socialiteproviders/manager": "^3.0"
     },

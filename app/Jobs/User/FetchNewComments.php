@@ -42,7 +42,6 @@ class FetchNewComments implements ShouldQueue
     {
         $api->authenticateClient($this->user);
         $pages = 1;
-        $i=0;
         for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
             $photos = $api->get(
                 'photos',
