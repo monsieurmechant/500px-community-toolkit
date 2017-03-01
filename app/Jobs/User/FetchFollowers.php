@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\User;
 
 use App\User;
 use App\Follower;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use App\Jobs\StoreFollowerFromApi;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Http\Services\FiveHundredPxService;
@@ -13,7 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class FetchAccountFollowers implements ShouldQueue
+class FetchFollowers implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

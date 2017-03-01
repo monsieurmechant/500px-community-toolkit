@@ -27,7 +27,7 @@ class FetchFollowers
     public function handle(UserCreated $event)
     {
         dispatch(
-            new \App\Jobs\FetchAccountFollowers($event->getUser()->getAttribute('id'))
+            new \App\Jobs\User\FetchFollowers($event->getUser()->getAttribute('id'))
         );
     }
 }

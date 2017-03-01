@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\User;
 
 use App\User;
 use App\Photo;
@@ -13,7 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class FetchAccountMedias implements ShouldQueue
+class FetchPhotos implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

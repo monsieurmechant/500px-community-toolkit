@@ -27,7 +27,7 @@ class FetchMedias
     public function handle(UserCreated $event)
     {
         dispatch(
-            new \App\Jobs\FetchAccountMedias($event->getUser()->getAttribute('id'))
+            new \App\Jobs\User\FetchPhotos($event->getUser()->getAttribute('id'))
         );
     }
 }

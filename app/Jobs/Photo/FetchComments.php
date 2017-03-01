@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Photo;
 
+use App\Photo;
 use App\Comment;
 use App\Follower;
-use App\Photo;
 use Illuminate\Bus\Queueable;
+use App\Jobs\StoreCommentFromApi;
+use App\Jobs\StoreFollowerFromApi;
 use App\Exceptions\JobDoneException;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,7 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class FetchMediaComments implements ShouldQueue
+class FetchComments implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

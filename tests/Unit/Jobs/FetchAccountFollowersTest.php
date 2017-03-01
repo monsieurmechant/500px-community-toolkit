@@ -13,12 +13,12 @@ use App\Follower;
 use Carbon\Carbon;
 use Mockery as m;
 use Tests\TestCase;
-use App\Jobs\FetchAccountFollowers;
+use App\Jobs\User\FetchFollowers;
 use Tests\Unit\Stubs\FiveHundredPxUsersFollowersCall;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 
-class FetchAccountFollowersTest extends TestCase
+class FetchFollowersTest extends TestCase
 {
 
     use DatabaseMigrations;
@@ -35,7 +35,7 @@ class FetchAccountFollowersTest extends TestCase
             ['query' => ['rpp' => 100, 'page' => 1]]
         )->andReturn(new FiveHundredPxUsersFollowersCall(5, 1, 1));
 
-        (new FetchAccountFollowers($user->getAttribute('id')))->handle($apiService);
+        (new FetchFollowers($user->getAttribute('id')))->handle($apiService);
     }
 
 
@@ -44,7 +44,7 @@ class FetchAccountFollowersTest extends TestCase
         $apiService = m::mock(\App\Http\Services\FiveHundredPxService::class);
         $apiService->shouldNotReceive('authenticateClient');
         $apiService->shouldNotReceive('get');
-        (new FetchAccountFollowers(123))->handle($apiService);
+        (new FetchFollowers(123))->handle($apiService);
     }
 
     public function testItAssociatesFollowersAccountsToTheUser()
@@ -62,7 +62,7 @@ class FetchAccountFollowersTest extends TestCase
                 ['query' => ['rpp' => 100, 'page' => $i]]
             )->andReturn(new FiveHundredPxUsersFollowersCall(5, $i, $pages));
         }
-        (new FetchAccountFollowers($user->getAttribute('id')))->handle($apiService);
+        (new FetchFollowers($user->getAttribute('id')))->handle($apiService);
 
         $user->load('followers');
         $this->assertEquals(25, count($user->followers));
@@ -109,7 +109,7 @@ class FetchAccountFollowersTest extends TestCase
             ['query' => ['rpp' => 100, 'page' => 1]]
         )->andReturn($callResponse);
 
-        (new FetchAccountFollowers($user->getAttribute('id')))->handle($apiService);
+        (new FetchFollowers($user->getAttribute('id')))->handle($apiService);
 
         $this->assertEquals(12345678, Follower::find($callResponse->followers[0]->id)->getAttribute('followers'));
         $this->assertNotEquals(87654321, Follower::find($callResponse->followers[1]->id)->getAttribute('followers'));
@@ -131,7 +131,7 @@ class FetchAccountFollowersTest extends TestCase
             ['query' => ['rpp' => 100, 'page' => 1]]
         )->andReturn($callResponse);
 
-        (new FetchAccountFollowers($user->getAttribute('id')))->handle($apiService);
+        (new FetchFollowers($user->getAttribute('id')))->handle($apiService);
 
         $this->assertEquals(0, Follower::find($callResponse->followers[0]->id)->getAttribute('followers'));
         $this->assertEquals(0, Follower::find($callResponse->followers[1]->id)->getAttribute('affection'));

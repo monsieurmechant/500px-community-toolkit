@@ -4,8 +4,8 @@ namespace App\Listeners\Photos;
 
 use App\Events\PhotoCreated;
 use App\Http\Services\FiveHundredPxService;
-use App\Jobs\FetchMediaComments;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Jobs\Photo\FetchComments as FetchPhotoComments;
 
 class FetchComments implements ShouldQueue
 {
@@ -35,7 +35,7 @@ class FetchComments implements ShouldQueue
     public function handle(PhotoCreated $event)
     {
         dispatch(
-            new FetchMediaComments($event->getPhoto()->getAttribute('id'))
+            new FetchPhotoComments($event->getPhoto()->getAttribute('id'))
         );
     }
 }
