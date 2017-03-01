@@ -37,7 +37,7 @@ class Photo extends Model
      * @var array
      */
     protected $casts = [
-        'id'      => 'integer',
+        'id' => 'integer',
         'privacy' => 'boolean',
     ];
 
@@ -51,10 +51,31 @@ class Photo extends Model
     ];
 
     /**
+     * Eager loads the comments and their children.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeWithComments($query)
+    {
+        return $query->with([
+            'comments' => function ($query) {
+                $query->whereNull('parent_id');
+            },
+            'comments.children'
+        ]);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
         return $this->belongsTo(\App\User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(\App\Comment::class);
     }
 }
