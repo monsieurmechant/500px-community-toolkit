@@ -80,4 +80,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(\App\Follower::class);
     }
+
+    public function photos()
+    {
+        return $this>$this->hasMany(\App\Photo::class);
+    }
 }

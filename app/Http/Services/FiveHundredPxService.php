@@ -32,7 +32,8 @@ class FiveHundredPxService
 
         $middleware = new Oauth1([
             'token'           => $user->getAttribute('access_token'),
-            'token_secret'    => $user->getAttribute('access_token_secret')
+            'token_secret'    => $user->getAttribute('access_token_secret'),
+            'consumer_key'    => getenv('500PX_KEY')
         ]);
         $stack->push($middleware);
 

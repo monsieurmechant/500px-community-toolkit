@@ -18,8 +18,12 @@ class EventServiceProvider extends ServiceProvider
             'SocialiteProviders\FiveHundredPixel\FiveHundredPixelExtendSocialite@handle',
         ],
         \App\Events\UserCreated::class => [
-            \App\Listeners\FetchUsersFollowers::class,
+            \App\Listeners\Users\FetchFollowers::class,
+            \App\Listeners\Users\FetchMedias::class,
         ],
+        \App\Events\PhotoCreated::class => [
+            \App\Listeners\Photos\FetchComments::class,
+        ]
     ];
 
     /**

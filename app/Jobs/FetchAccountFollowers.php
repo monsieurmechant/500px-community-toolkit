@@ -89,7 +89,7 @@ class FetchAccountFollowers implements ShouldQueue
                     $account->save();
                 }
             } catch (ModelNotFoundException $e) {
-                $this->persistFollower($follower);
+                dispatch((new StoreFollowerFromApi($follower))->onConnection('sync'));
             }
         }
     }

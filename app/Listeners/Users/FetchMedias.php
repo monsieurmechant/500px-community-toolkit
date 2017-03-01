@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Users;
 
 use App\Events\UserCreated;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class FetchUsersFollowers
+class FetchMedias
 {
     /**
      * Create the event listener.
@@ -27,7 +27,7 @@ class FetchUsersFollowers
     public function handle(UserCreated $event)
     {
         dispatch(
-            new \App\Jobs\FetchAccountFollowers($event->getUser()->getAttribute('id'))
+            new \App\Jobs\FetchAccountMedias($event->getUser()->getAttribute('id'))
         );
     }
 }
