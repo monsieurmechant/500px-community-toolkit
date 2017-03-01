@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Comments;
 
+use App\Jobs\User\FetchNewComments;
 use Illuminate\Console\Command;
 
 class FetchComments extends Command
@@ -35,6 +36,10 @@ class FetchComments extends Command
      */
     public function handle()
     {
-
+        \App\User::all()->each(function($user) {
+           dispatch(
+               new FetchNewComments($user)
+           ); 
+        });
     }
 }

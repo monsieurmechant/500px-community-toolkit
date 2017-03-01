@@ -59,7 +59,6 @@ class FetchComments implements ShouldQueue
                         'query' =>
                             [
                                 'page'           => $currentPage,
-                                'nested'         => false,
                                 'sort'           => 'created_at',
                                 'sort_direction' => 'desc',
                                 'consumer_key'   => getenv('500PX_KEY'),
