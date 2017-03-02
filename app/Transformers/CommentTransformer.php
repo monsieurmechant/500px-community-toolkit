@@ -15,11 +15,10 @@ class CommentTransformer
      * @var array
      */
     protected $defaultIncludes = [
-        'follower',
+        'follower', 'children'
     ];
 
     protected $availableIncludes = [
-        'children',
         'photo',
         'parent'
     ];

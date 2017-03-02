@@ -70,6 +70,19 @@ class Photo extends Model
     }
 
     /**
+     * Returns only the photos that have had new comments
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeOnlyWithNewComments($query)
+    {
+        return $query->whereHas('comments', function ($query) {
+            $query->where('read', '=', 0);
+        });
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()

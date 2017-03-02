@@ -21,6 +21,10 @@ class PhotosController extends InternalApiController
             $photos->where('posted_at', '<=', base64_decode($request->query('cursor')));
         }
 
+        if ($request->query('unread_comments', false)) {
+            $photos->onlyWithNewComments();
+        }
+
         $photos = $photos->orderBy('posted_at', 'DSC')->take(50)->get();
 
         $nextCursor = '';
