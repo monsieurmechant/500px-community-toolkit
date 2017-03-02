@@ -108,9 +108,9 @@ class FetchPhotos implements ShouldQueue
         $url = $urlFull = null;
 
         foreach ($photo->images as $image) {
-            if ((int) $image->size === 3) {
+            if ((int)$image->size === 3) {
                 $url = $image->https_url;
-            } elseif ((int) $image->size === 5) {
+            } elseif ((int)$image->size === 5) {
                 $urlFull = $image->https_url;
             }
         }
@@ -119,10 +119,13 @@ class FetchPhotos implements ShouldQueue
             'id'          => $photo->id,
             'url'         => $url,
             'url_full'    => $urlFull,
+            'link'        => $photo->url,
             'name'        => $photo->name ?? null,
             'description' => $photo->description ?? null,
             'privacy'     => (bool)$photo->privacy,
             'user_id'     => $this->userId,
+            'posted_at'   => \Carbon\Carbon::createFromFormat(\DateTime::ATOM, $photo->created_at)
+                ->setTimezone(config('app.timezone')),
         ]);
     }
 }

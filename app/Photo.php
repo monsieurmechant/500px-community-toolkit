@@ -25,10 +25,12 @@ class Photo extends Model
         'id',
         'url',
         'url_full',
+        'link',
         'name',
         'description',
         'privacy',
         'user_id',
+        'posted_at',
     ];
 
     /**
@@ -62,7 +64,8 @@ class Photo extends Model
             'comments' => function ($query) {
                 $query->whereNull('parent_id');
             },
-            'comments.children'
+            'comments.children',
+            'comment.follower',
         ]);
     }
 

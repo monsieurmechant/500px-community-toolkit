@@ -39,6 +39,7 @@ class Comment extends Model
         'photo_id'    => 'integer',
         'parent_id'   => 'integer',
         'follower_id' => 'integer',
+        'read'        => 'boolean',
     ];
 
     /**

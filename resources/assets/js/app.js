@@ -13,6 +13,7 @@ require('./bootstrap');
  */
 
 Vue.component('top-followers', require('./components/Followers/Top.vue'));
+Vue.component('photos-grid', require('./components/Photos/Grid.vue'));
 
 const app = new Vue({
     el: '#app'

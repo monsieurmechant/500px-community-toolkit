@@ -11,11 +11,15 @@
 |
 */
 
+Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
+Route::get('auth/500px', ['as' => 'auth-500px', 'uses' => 'Auth\AuthController@redirectToProvider']);
+Route::get('auth/500px/callback', 'Auth\AuthController@handleProviderCallback');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
     Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
     Route::get('/followers', ['as' => 'followers', 'uses' => 'FollowersController@index']);
+    Route::get('/photos', ['as' => 'photos', 'uses' => 'PhotosController@index']);
 });
 
 // Internal API
@@ -26,8 +30,6 @@ Route::group([
 ], function () {
     Route::get('followers', ['as' => 'internal-followers-api', 'uses' => 'FollowersController@index']);
     Route::get('followers/{id}', ['as' => 'internal-follower-api', 'uses' => 'FollowersController@show']);
+    Route::get('photos', ['as' => 'internal-photos-api', 'uses' => 'PhotosController@index']);
+    Route::get('photos/{id}', ['as' => 'internal-photo-api', 'uses' => 'PhotosController@show']);
 });
-
-Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
-Route::get('auth/500px', ['as' => 'auth-500px', 'uses' => 'Auth\AuthController@redirectToProvider']);
-Route::get('auth/500px/callback', 'Auth\AuthController@handleProviderCallback');

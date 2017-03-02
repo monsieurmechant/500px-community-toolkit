@@ -17,10 +17,12 @@ class CreatePhotosTable extends Migration
             $table->unsignedInteger('id')->unique();
             $table->string('url');
             $table->string('url_full');
+            $table->string('link');
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->boolean('privacy')->default(false);
             $table->unsignedInteger('user_id');
+            $table->timestamp('posted_at');
 
             $table->timestamps();
 

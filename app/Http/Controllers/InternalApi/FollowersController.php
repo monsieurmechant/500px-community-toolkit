@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\InternalApi;
 
 use App\Jobs\GetFullFollowerProfile;
-use App\Http\Requests\GetFollowersRequest;
-use App\Http\Requests\GetFollowerProfileRequest;
+use App\Http\Requests\Followers\GetFollowersRequest;
+use App\Http\Requests\Followers\GetFollowerProfileRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FollowersController extends InternalApiController
