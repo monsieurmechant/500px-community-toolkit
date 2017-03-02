@@ -23,7 +23,11 @@
         methods: {
           fetchPhotos() {
             this.loading = true;
-            Axios.get('/internal/photos').then(response => {
+            Axios.get('/internal/photos', {
+              params: {
+                'unread_comments': 1,
+              },
+            }).then(response => {
               this.photos = response.data.data;
               this.loading = false;
             }).catch();
