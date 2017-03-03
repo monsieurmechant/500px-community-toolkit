@@ -32,7 +32,7 @@ class PhotoTransformer extends TransformerAbstract
             'id'          => (int)$photo->getAttribute('id'),
             'thumbnail'   => $photo->getAttribute('url'),
             'full'        => $photo->getAttribute('url_full'),
-            'name'        => $photo->getAttribute('name'),
+            'title'       => $photo->getAttribute('name'),
             'description' => $photo->getAttribute('description'),
             'url'         => 'https://500px.com/' . $photo->getAttribute('link'),
             'created_at'  => $photo->getAttribute('posted_at'),

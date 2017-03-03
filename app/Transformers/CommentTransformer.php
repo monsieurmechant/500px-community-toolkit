@@ -38,6 +38,7 @@ class CommentTransformer extends TransformerAbstract
             'id'         => $comment->getAttribute('id'),
             'body'       => $comment->getAttribute('body'),
             'read'       => $comment->getAttribute('read'),
+            'parent_id'  => $comment->getAttribute('parent_id') ?? null,
             'created_at' => $comment->getAttribute('posted_at'),
             'links'      => [
                 [
