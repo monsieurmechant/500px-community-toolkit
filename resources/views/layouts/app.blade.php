@@ -41,7 +41,7 @@
 
             <div id="nav-menu" class="nav-right nav-menu">
                 <a class="nav-item " href="{{ route('photos') }}">
-                    My Comments <comments-counter></comments-counter>
+                    My Comments&nbsp;<comments-counter></comments-counter>
                 </a>
                 <a class="nav-item " href="{{ route('followers') }}">
                     My Community

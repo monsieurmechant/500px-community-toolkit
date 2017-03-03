@@ -94,7 +94,9 @@ class CreateApiDataFromCollection
                 $includes[] = $include . '.' . $defaultInclude;
             }
         }
-        $this->getResource()->getData()->load(...$includes);
+        if (count($includes) > 0) {
+            $this->getResource()->getData()->load(...$includes);
+        }
 
         return $this;
     }

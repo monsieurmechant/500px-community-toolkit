@@ -2,7 +2,8 @@
   <article class="media">
     <figure class="media-left">
       <p class="image is-64x64">
-        <img :src="comment.follower.data.avatar">
+        <img :src="comment.follower.data.avatar" v-if="!photoThumbnail">
+        <img :src="comment.photo.data.thumbnail" v-if="photoThumbnail">
       </p>
     </figure>
     <div class="media-content">
@@ -41,15 +42,18 @@
           </div>
         </div>
       </article>
-      <nav class="level">
+      <nav class="level" v-if="interactions">
         <div class="level-left">
+          <a class="level-item" @click="$emit('requestHistory', comment.follower.data.id)">
+            <span class="icon is-small"><i class="fa fa-history"></i></span>
+          </a>
           <a class="level-item">
             <span class="icon is-small"><i class="fa fa-reply"></i></span>
           </a>
         </div>
       </nav>
     </div>
-    <div class="media-right">
+    <div class="media-right" v-if="interactions">
       <a class="button is-primary">
               <span class="icon is-small">
                 <i class="fa fa-eye"></i>
@@ -72,6 +76,14 @@
       comment: {
         type: Object,
         required: true,
+      },
+      interactions: {
+        type: Boolean,
+        default: true,
+      },
+      'photo-thumbnail': {
+        type: Boolean,
+        default: false,
       }
     }
   };

@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this>$this->hasMany(\App\Photo::class);
     }
+
+    public function comments()
+    {
+        return $this->hasManyThrough(\App\Comment::class, \App\Photo::class);
+    }
 }

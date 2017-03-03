@@ -17,11 +17,12 @@
     </div>
     <div class="column is-two-quarters">
       <div class="comments-list">
-        <Single v-for="comment in commentThread" :comment="comment"></Single>
+        <Single v-for="comment in commentThread" :comment="comment" @requestHistory="displayHistory"></Single>
       </div>
     </div>
     <div class="column is-one-quarter">
-      <PhotoCard :photo="selectedPhoto"></PhotoCard>
+      <PhotoCard :photo="selectedPhoto" v-if="!history"></PhotoCard>
+      <History v-if="history"></History>
     </div>
   </div>
 </template>
@@ -30,6 +31,7 @@
   import { mapActions, mapGetters } from 'vuex';
   import Loader from '../UI/InlineLoader';
   import Single from './Single';
+  import History from './ListByUser';
   import PhotoCard from '../Photos/Card';
 
   export default {
@@ -37,16 +39,26 @@
       data:  function () {
           return {
             thread: 0,
+            history: null,
           }
         },
       methods: {
         ...mapActions([
           'getCommentsByMedias',
+          'getCommentsByUser',
         ]),
         unreadComments(comments) {
           return comments.filter(comment => {
             return !comment.read;
           })
+        },
+        displayHistory(followerId) {
+          if (this.history && this.history === followerId) {
+            return this.history = null;
+          }
+          this.getCommentsByUser(followerId).then(() => {
+          this.history = followerId;
+          });
         },
       },
       computed: {
@@ -76,7 +88,7 @@
         },
       },
       components: {
-        Loader, Single, PhotoCard,
+        Loader, Single, PhotoCard, History
       },
       mounted() {
         this.getCommentsByMedias();

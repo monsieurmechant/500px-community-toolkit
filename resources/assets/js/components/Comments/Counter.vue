@@ -1,5 +1,5 @@
 <template>
-  <a :class="[loading ? 'is-loading':'', 'is-primary','button']">
+  <a :class="[loading ? 'is-loading':'', 'is-primary', 'is-small', 'button']">
     <template v-if="!loading && loaded">
       {{ totalUnreadComments }}{{ hasMore ? '+':'' }}
     </template>
@@ -15,9 +15,9 @@
     computed: {
      ...mapGetters({
         loading: 'isFetchingComments',
-        loaded: 'isLoaded',
+        loaded: 'commentsByMediaLoaded',
         totalUnreadComments: 'totalUnreadComments',
-        hasMore: 'hasMore',
+        hasMore: 'hasMorePhotosWithComments',
       }),
     },
     methods: {
@@ -31,6 +31,7 @@
       }
     },
   };
+
 
 
 </script>

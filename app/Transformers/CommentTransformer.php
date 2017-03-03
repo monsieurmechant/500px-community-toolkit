@@ -82,6 +82,6 @@ class CommentTransformer extends TransformerAbstract
      */
     public function includePhoto(Comment $comment)
     {
-        return $this->item($comment->photo, new CommentTransformer());
+        return $this->item($comment->photo, new PhotoTransformer());
     }
 }

@@ -54,6 +54,15 @@ class Comment extends Model
     ];
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $events = [
+        'created' => UserCreated::class,
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function follower()

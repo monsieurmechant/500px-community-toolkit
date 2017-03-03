@@ -142,7 +142,7 @@ export const getters = {
    * @param state
    * @return bool
    */
-  isLoaded: state => state.loaded,
+  commentsByMediaLoaded: state => state.loaded,
 
   /**
    * Returns the list of photos.
