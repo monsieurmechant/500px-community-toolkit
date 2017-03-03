@@ -14,7 +14,8 @@ require('./bootstrap');
 import store from './store';
 
 Vue.component('top-followers', require('./components/Followers/Top.vue'));
-Vue.component('photos-grid', require('./components/Photos/Grid.vue'));
+Vue.component('comments-by-photos', require('./components/Comments/ListByPhotos.vue'));
+Vue.component('comments-counter', require('./components/Comments/Counter.vue'));
 
 const app = new Vue({
     el: '#app',

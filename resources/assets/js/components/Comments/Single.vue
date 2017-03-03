@@ -1,0 +1,79 @@
+<template>
+  <article class="media">
+    <figure class="media-left">
+      <p class="image is-64x64">
+        <img :src="comment.follower.data.avatar">
+      </p>
+    </figure>
+    <div class="media-content">
+      <div class="content">
+        <p>
+          <strong>{{ comment.follower.data.name }}</strong>
+          <small>
+            <a :href="`http://500px.com/${comment.follower.data.username}`">
+              <span class="icon is-small"><i class="fa fa-500px"></i></span> {{ comment.follower.data.username }}
+            </a>
+          </small>
+          <small>31m</small>
+          <br>
+          {{ comment.body }}
+        </p>
+      </div>
+      <article class="media" v-for="child in comment.children.data">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img :src="child.follower.data.avatar">
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>{{ child.follower.data.name }}</strong>
+              <small>
+                <a :href="`http://500px.com/${child.follower.data.username}`">
+                  <span class="icon is-small"><i class="fa fa-500px"></i></span> {{ child.follower.data.username }}
+                </a>
+              </small>
+              <small>31m</small>
+              <br>
+              {{ child.body }}
+            </p>
+          </div>
+        </div>
+      </article>
+      <nav class="level">
+        <div class="level-left">
+          <a class="level-item">
+            <span class="icon is-small"><i class="fa fa-reply"></i></span>
+          </a>
+        </div>
+      </nav>
+    </div>
+    <div class="media-right">
+      <a class="button is-primary">
+              <span class="icon is-small">
+                <i class="fa fa-eye"></i>
+              </span>
+      </a>
+    </div>
+  </article>
+</template>
+<style>
+
+</style>
+<script>
+  export default{
+    name: 'Comment',
+    data() {
+      return {
+      };
+    },
+    props: {
+      comment: {
+        type: Object,
+        required: true,
+      }
+    }
+  };
+
+</script>

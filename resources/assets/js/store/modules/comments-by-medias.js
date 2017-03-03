@@ -1,36 +1,30 @@
 /* eslint-disable no-shadow */
 import {
-  REQUEST_PHOTOS,
-  GET_PHOTOS_SUCCESS,
-  GET_MORE_PHOTOS_SUCCESS,
-  GET_PHOTOS_FAILURE,
-  UPDATE_PHOTO_SUCCESS,
-  SET_TO_PHOTOS_WITH_UNREAD_COMMENTS,
-  SET_TO_REGULAR_PHOTOS_LIST,
-  ADD_INCLUDE,
-  REMOVE_INCLUDE,
+  REQUEST_COMMENTS_BY_MEDIAS,
+  GET_COMMENTS_BY_MEDIAS_SUCCESS,
+  GET_MORE_COMMENTS_BY_MEDIAS_SUCCESS,
+  GET_COMMENTS_BY_MEDIAS_FAILURE,
 } from './../mutation-types';
 import Axios from 'axios';
 
 const state = {
   isFetching: false,
+  loaded: false,
   photos: [],
   cursor: {
     previous: '',
     next: '',
     current: '',
   },
-  includes: [],
-  unread_comments: false,
   hasMore: true,
   error: null,
 };
 
 export const mutations = {
-  [REQUEST_PHOTOS](state) {
+  [REQUEST_COMMENTS_BY_MEDIAS](state) {
     state.isFetching = true;
   },
-  [GET_PHOTOS_SUCCESS](state, { photos }) {
+  [GET_COMMENTS_BY_MEDIAS_SUCCESS](state, { photos }) {
     state.error = null;
     if (Array.isArray(photos.data)) {
       state.photos = photos.data;
@@ -43,9 +37,10 @@ export const mutations = {
       };
       state.hasMore = photos.meta.cursor.count >= 50;
     }
+    state.loaded = true;
     state.isFetching = false;
   },
-  [GET_MORE_PHOTOS_SUCCESS](state, { photos }) {
+  [GET_MORE_COMMENTS_BY_MEDIAS_SUCCESS](state, { photos }) {
     state.error = null;
     state.photos.push(...photos.data);
     state.cursor = {
@@ -56,26 +51,9 @@ export const mutations = {
     state.hasMore = photos.meta.cursor.count >= 50;
     state.isFetching = false;
   },
-  [GET_PHOTOS_FAILURE](state, { data }) {
+  [GET_COMMENTS_BY_MEDIAS_FAILURE](state, { data }) {
     state.error = data.error;
     state.isFetching = false;
-  },
-  [SET_TO_PHOTOS_WITH_UNREAD_COMMENTS](state) {
-    state.unread_comments = 1;
-  },
-  [SET_TO_REGULAR_PHOTOS_LIST](state) {
-    state.unread_comments = 0;
-  },
-  [ADD_INCLUDE](state, include) {
-    state.includes = [
-      ...state.includes,
-      include
-    ];
-  },
-  [REMOVE_INCLUDE](state, include) {
-    state.includes = state.includes.filter((v) => {
-      return v !== include;
-    });
   },
 };
 
@@ -84,19 +62,19 @@ export const actions = {
    * Requests the photos from
    * the /photos API endpoint
    */
-  getPhotos({ state, commit }) {
-    commit(REQUEST_PHOTOS);
+  getCommentsByMedias({ commit }) {
+    commit(REQUEST_COMMENTS_BY_MEDIAS);
     return new Promise((resolve, reject) => {
       Axios.get('/internal/photos', {
         params: {
-          'unread_comments': state.unread_comments ? 1 : 0,
-          includes: state.includes,
+          unread_comments: 1,
+          includes: ['comments'],
         },
       }).then(response => {
-        commit(GET_PHOTOS_SUCCESS, { photos: response.data });
+        commit(GET_COMMENTS_BY_MEDIAS_SUCCESS, { photos: response.data });
         resolve(response.data);
       }).catch(response => {
-        commit(GET_PHOTOS_FAILURE, response.data);
+        commit(GET_COMMENTS_BY_MEDIAS_FAILURE, response.data);
         reject(response.data);
       });
     });
@@ -107,36 +85,24 @@ export const actions = {
    * cursors received in a
    * previous call
    */
-  getMorePhotos({ state, commit }) {
-    commit(REQUEST_PHOTOS);
+  getMoreCommentsByMedias({ state, commit }) {
+    commit(REQUEST_COMMENTS_BY_MEDIAS);
     return new Promise((resolve, reject) => {
       Axios.get('/internal/photos', {
         params: {
-          unread_comments: state.unread_comments ? 1 : 0,
+          unread_comments: 1,
+          includes: ['comments'],
           cursor: state.cursor.next,
           previous: state.cursor.current,
-          includes: state.includes,
         },
       }).then(response => {
-        commit(GET_MORE_PHOTOS_SUCCESS, { photos: response.data });
+        commit(GET_MORE_COMMENTS_BY_MEDIAS_SUCCESS, { photos: response.data });
         resolve(response.data);
       }).catch(response => {
-        commit(GET_PHOTOS_FAILURE, response.data);
+        commit(GET_COMMENTS_BY_MEDIAS_FAILURE, response.data);
         reject(response.data);
       });
     });
-  },
-  setToPhotosWithUnreadComments({ commit }) {
-    commit(SET_TO_PHOTOS_WITH_UNREAD_COMMENTS);
-  },
-  setToRegularPhotosList({ commit }) {
-    commit(SET_TO_REGULAR_PHOTOS_LIST);
-  },
-  addInclude({ commit }, include) {
-    commit(ADD_INCLUDE, include);
-  },
-  removeInclude({ commit }, include) {
-    commit(REMOVE_INCLUDE, include);
   },
   /**
    * Makes a PUT request to the API to update an entry.
@@ -168,7 +134,15 @@ export const getters = {
    * @param state
    * @return bool
    */
-  isFetchingPhotos: state => state.isFetching,
+  isFetchingComments: state => state.isFetching,
+
+  /**
+   * Was the state already fetched from the API
+   *
+   * @param state
+   * @return bool
+   */
+  isLoaded: state => state.loaded,
 
   /**
    * Returns the list of photos.
@@ -178,7 +152,7 @@ export const getters = {
    * @param state
    * @return object
    */
-  photosList: state => state.photos,
+  photosWithCommentsList: state => state.photos,
 
   /**
    * Are there more photos to fetch from the API.
@@ -192,7 +166,22 @@ export const getters = {
    * @param state
    * @return object
    */
-  hasMorePhotos: state => state.hasMore,
+  hasMorePhotosWithComments: state => state.hasMore,
+
+  /**
+   * Returns the total number of unread comments
+   * currently in the state.
+   *
+   * @param state
+   * @return int
+   */
+  totalUnreadComments: state => {
+    return state.photos.reduce((acc, photo) => {
+      return acc + photo.comments.data.filter(comment => {
+            return !comment.read;
+          }).length;
+    }, 0);
+  },
 };
 
 export default {

@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import photos from './modules/photos';
+import commentsByMedia from './modules/comments-by-medias';
 
 Vue.use(Vuex);
 
 
 export default new Vuex.Store({
   modules: {
-    photos,
+    commentsByMedia,
   },
   strict: false,
 });

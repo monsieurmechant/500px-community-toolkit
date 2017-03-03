@@ -15,6 +15,6 @@
     </section>
 
     <section class="container">
-        <photos-grid></photos-grid>
+        <comments-by-photos></comments-by-photos>
     </section>
 @endsection
