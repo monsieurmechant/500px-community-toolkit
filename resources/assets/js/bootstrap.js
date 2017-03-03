@@ -6,7 +6,7 @@ window._ = require('lodash');
  * using reactive data binding and reusable components. Vue's API is clean
  * and simple, leaving you to focus on building your next great project.
  */
-
+window.Vuex = require('vuex');
 window.Vue = require('vue');
 
 /**

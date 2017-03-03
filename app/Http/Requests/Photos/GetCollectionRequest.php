@@ -25,7 +25,7 @@ class GetCollectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'includes'        => 'string|in:user,comments',
+            'includes'        => 'array|in:user,comments',
             'unread_comments' => 'boolean',
             'cursor'          => 'string',
             'previous'        => 'string'

@@ -5,8 +5,9 @@ namespace App\Transformers;
 
 
 use App\Comment;
+use League\Fractal\TransformerAbstract;
 
-class CommentTransformer
+class CommentTransformer extends TransformerAbstract
 {
 
     /**
@@ -15,7 +16,8 @@ class CommentTransformer
      * @var array
      */
     protected $defaultIncludes = [
-        'follower', 'children'
+        'follower',
+        'children'
     ];
 
     protected $availableIncludes = [
@@ -46,22 +48,38 @@ class CommentTransformer
         ];
     }
 
-    public function includeFollower(Photo $comment)
+    /**
+     * @param Comment $comment
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeFollower(Comment $comment)
     {
         return $this->item($comment->follower, new FollowerTransformer());
     }
 
-    public function includeChildren(Photo $comment)
+    /**
+     * @param Comment $comment
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeChildren(Comment $comment)
     {
         return $this->collection($comment->children, new CommentTransformer());
     }
 
-    public function includeParent(Photo $comment)
+    /**
+     * @param Comment $comment
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeParent(Comment $comment)
     {
         return $this->item($comment->parent, new CommentTransformer());
     }
 
-    public function includePhoto(Photo $comment)
+    /**
+     * @param Comment $comment
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includePhoto(Comment $comment)
     {
         return $this->item($comment->photo, new CommentTransformer());
     }

@@ -11,10 +11,12 @@ require('./bootstrap');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import store from './store';
 
 Vue.component('top-followers', require('./components/Followers/Top.vue'));
 Vue.component('photos-grid', require('./components/Photos/Grid.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store
 });

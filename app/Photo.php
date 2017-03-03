@@ -65,12 +65,13 @@ class Photo extends Model
                 $query->whereNull('parent_id');
             },
             'comments.children',
-            'comment.follower',
+            'comments.follower',
         ]);
     }
 
     /**
      * Returns only the photos that have had new comments
+     * Also Eager loads the comments and their children.
      *
      * @param $query
      * @return mixed
