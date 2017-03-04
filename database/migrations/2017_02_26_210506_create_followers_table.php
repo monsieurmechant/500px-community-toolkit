@@ -18,7 +18,6 @@ class CreateFollowersTable extends Migration
             $table->string('username')->nullable();
             $table->string('name')->nullable();
             $table->string('avatar')->nullable();
-            $table->string('cover')->nullable();
             $table->unsignedInteger('followers')->default(0);
             $table->unsignedInteger('affection')->default(0);
 

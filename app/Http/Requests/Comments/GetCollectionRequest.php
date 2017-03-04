@@ -25,9 +25,7 @@ class GetCollectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'follower_id'     => 'exists:followers,id',
-            'cursor'          => 'string',
-            'previous'        => 'string'
+            'follower_id'     => 'required|exists:followers,id',
         ];
     }
 }
