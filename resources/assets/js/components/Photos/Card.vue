@@ -14,7 +14,6 @@
       <div class="content">
         <p v-html="photo.description"></p>
         <br>
-        <small>11:09 PM - 1 Jan 2016</small>
       </div>
     </div>
   </div>

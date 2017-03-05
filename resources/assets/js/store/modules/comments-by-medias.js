@@ -60,12 +60,10 @@ export const mutations = {
     const pIndex = state.photos.findIndex(p => p.id === photoId);
     let cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === commentId);
 
-    state.photos[pIndex].comments.data[cIndex].read = true;
-
     const parentId = state.photos[pIndex].comments.data[cIndex].parent_id
     if (parentId === null)
     {
-      return;
+      return state.photos[pIndex].comments.data[cIndex].read = true;;
     }
 
     cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === parentId);
@@ -74,7 +72,7 @@ export const mutations = {
         c => c.id === commentId
     );
 
-    state.photos[pIndex].comments.data[cIndex].children.data[chIndex].read = true;
+    return state.photos[pIndex].comments.data[cIndex].children.data[chIndex].read = true;
   },
   [MARK_ALL_COMMENT_READ_SUCCESS](state, { photoId }) {
     state.photos = state.photos.filter(p => p.id !== photoId);

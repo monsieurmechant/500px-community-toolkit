@@ -114,10 +114,9 @@
 
 <style lang="scss" scoped>
   .comments-list-enter-active, .comments-list-leave-active {
-    transition: all 1s;
+    transition: all .8s;
   }
-  .comments-list-enter, .comments-list-leave-to /* comments-list-leave-active for <2.1.8 */ {
+  .comments-list-enter, .comments-list-leave-to {
     opacity: 0;
-    transform: translateY(30px);
   }
 </style>

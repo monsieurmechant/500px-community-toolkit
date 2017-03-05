@@ -15,7 +15,7 @@
               <span class="icon is-small"><i class="fa fa-500px"></i></span> {{ comment.follower.data.username }}
             </a>
           </small>
-          <small>31m</small>
+          <small>{{ timeFromUser(comment.created_at) }}</small>
           <br>
           {{ comment.body }}
         </p>
@@ -35,7 +35,7 @@
                   <span class="icon is-small"><i class="fa fa-500px"></i></span> {{ child.follower.data.username }}
                 </a>
               </small>
-              <small>31m</small>
+              <small>{{ timeFromUser(child.created_at) }}</small>
               <br>
               {{ child.body }}
             </p>
@@ -61,7 +61,7 @@
       </nav>
     </div>
     <div class="media-right" v-if="interactions">
-      <a class="button is-primary" @click="$emit('markRead', comment.id)"  v-if="!comment.read">
+      <a class="button is-primary" @click="$emit('markRead', comment.id)" v-if="!comment.read">
               <span class="icon is-small">
                 <i class="fa fa-eye"></i>
               </span>
@@ -73,11 +73,14 @@
 
 </style>
 <script>
+  const moment = require('moment-timezone');
   export default{
     name: 'Comment',
-    data() {
-      return {
-      };
+    methods: {
+      timeFromUser(dateTime) {
+        return moment.tz(dateTime.date, dateTime.timezone).
+        tz(moment.tz.guess()).fromNow();
+      },
     },
     props: {
       comment: {
@@ -94,5 +97,6 @@
       }
     }
   };
+
 
 </script>
