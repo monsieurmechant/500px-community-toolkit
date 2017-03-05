@@ -57,8 +57,25 @@ export const mutations = {
   },
   [MARK_COMMENT_READ_SUCCESS](state, { commentId, photoId }) {
     const pIndex = state.photos.findIndex(p => p.id === photoId);
-    const cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === commentId);
+    let cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === commentId);
+
     state.photos[pIndex].comments.data[cIndex].read = true;
+
+    const parentId = state.photos[pIndex].comments.data[cIndex].parent_id
+    if (parentId === null)
+    {
+      return;
+    }
+
+    cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === parentId);
+
+    const chIndex = state.photos[pIndex].comments.data[cIndex].children.data.findIndex(
+        c => c.id === commentId
+    );
+
+    state.photos[pIndex].comments.data[cIndex].children.data[chIndex].read = true;
+
+
   }
 };
 

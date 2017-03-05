@@ -1,5 +1,5 @@
 <template>
-  <article class="media">
+  <article class="media comment">
     <figure class="media-left">
       <p class="image is-64x64">
         <img :src="comment.follower.data.avatar" v-if="!photoThumbnail">
@@ -41,6 +41,13 @@
             </p>
           </div>
         </div>
+        <div class="media-right" v-if="interactions">
+          <a class="button is-primary" @click="$emit('markRead', child.id)" v-if="!child.read">
+              <span class="icon is-small">
+                <i class="fa fa-eye"></i>
+              </span>
+          </a>
+        </div>
       </article>
       <nav class="level" v-if="interactions">
         <div class="level-left">
@@ -54,7 +61,7 @@
       </nav>
     </div>
     <div class="media-right" v-if="interactions">
-      <a class="button is-primary" @click="$emit('markRead', comment.id)">
+      <a class="button is-primary" @click="$emit('markRead', comment.id)"  v-if="!comment.read">
               <span class="icon is-small">
                 <i class="fa fa-eye"></i>
               </span>

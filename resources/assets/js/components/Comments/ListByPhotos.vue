@@ -17,12 +17,15 @@
     </div>
     <div class="column is-two-quarters">
       <div class="comments-list">
-        <Single v-for="comment in commentThread"
-                :comment="comment"
-                @requestHistory="displayHistory"
-                @markRead="markCommentRead(comment.id)"
-        >
-        </Single>
+        <transition-group name="comments-list" tag="div">
+          <Single v-for="comment in commentThread"
+                  :key="comment.id"
+                  :comment="comment"
+                  @requestHistory="displayHistory"
+                  @markRead="markCommentRead"
+          >
+          </Single>
+        </transition-group>
       </div>
     </div>
     <div class="column is-one-quarter">
@@ -106,4 +109,12 @@
 </script>
 
 <style lang="scss" scoped>
+  .comments-list-enter-active, .comments-list-leave-active {
+    transition: all 1s;
+  }
+  .comments-list-enter, .comments-list-leave-to /* comments-list-leave-active for <2.1.8 */ {
+    opacity: 0;
+    transform: translateY(30px);
+
+  }
 </style>
