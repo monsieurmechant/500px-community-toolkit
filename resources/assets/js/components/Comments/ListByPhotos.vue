@@ -85,6 +85,10 @@
             return [];
           }
 
+          if (this.photos.length < this.thread + 1 ) {
+            this.thread = this.photos.length - 1;
+          }
+
           return this.photos[this.thread].comments.data.filter(comment => {
             if (comment.parent_id !== null) {
               return false
