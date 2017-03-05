@@ -108,7 +108,10 @@ class CreateApiDataFromModel
                 $includes[] = $include . '.' . $defaultInclude;
             }
         }
-        $this->getResource()->getData()->load(...$includes);
+
+        if (count($includes)) {
+            $this->getResource()->getData()->load(...$includes);
+        }
 
         return $this;
     }

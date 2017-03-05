@@ -17,7 +17,12 @@
     </div>
     <div class="column is-two-quarters">
       <div class="comments-list">
-        <Single v-for="comment in commentThread" :comment="comment" @requestHistory="displayHistory"></Single>
+        <Single v-for="comment in commentThread"
+                :comment="comment"
+                @requestHistory="displayHistory"
+                @markRead="markCommentRead(comment.id)"
+        >
+        </Single>
       </div>
     </div>
     <div class="column is-one-quarter">
@@ -46,6 +51,7 @@
         ...mapActions([
           'getCommentsByMedias',
           'getCommentsByUser',
+          'markCommentRead',
         ]),
         unreadComments(comments) {
           return comments.filter(comment => {

@@ -54,7 +54,7 @@
       </nav>
     </div>
     <div class="media-right" v-if="interactions">
-      <a class="button is-primary">
+      <a class="button is-primary" @click="$emit('markRead', comment.id)">
               <span class="icon is-small">
                 <i class="fa fa-eye"></i>
               </span>

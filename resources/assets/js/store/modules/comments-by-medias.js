@@ -1,9 +1,9 @@
-/* eslint-disable no-shadow */
 import {
   REQUEST_COMMENTS_BY_MEDIAS,
   GET_COMMENTS_BY_MEDIAS_SUCCESS,
   GET_MORE_COMMENTS_BY_MEDIAS_SUCCESS,
   GET_COMMENTS_BY_MEDIAS_FAILURE,
+  MARK_COMMENT_READ_SUCCESS,
 } from './../mutation-types';
 import Axios from 'axios';
 
@@ -55,6 +55,11 @@ export const mutations = {
     state.error = data.error;
     state.isFetching = false;
   },
+  [MARK_COMMENT_READ_SUCCESS](state, { commentId, photoId }) {
+    const pIndex = state.photos.findIndex(p => p.id === photoId);
+    const cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === commentId);
+    state.photos[pIndex].comments.data[cIndex].read = true;
+  }
 };
 
 export const actions = {
@@ -109,16 +114,24 @@ export const actions = {
    * If successful the state will also be updated.
    * The error will be returned in a promise.
    */
-  // updatePhoto({ state, dispatch }, { id, data }) {
-  //   return new Promise((resolve, reject) => {
-  //     api.updatePhoto(id, data).then(response => {
-  //       dispatch('photoUpdated', { id, data });
-  //       resolve(response.data);
-  //     }, response => {
-  //       reject(response.data);
-  //     });
-  //   });
-  // },
+  markCommentRead({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      Axios.put(`/internal/comments/${id}`, {
+        read: true,
+      }).then(response => {
+        commit(
+            MARK_COMMENT_READ_SUCCESS,
+            {
+              commentId: id,
+              photoId: response.data.data.photo.data.id
+            }
+        );
+        resolve(response.data);
+      }, response => {
+        reject(response.data);
+      });
+    });
+  },
   /**
    * Updates the state when a photo is updated.
    */

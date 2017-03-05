@@ -32,5 +32,15 @@ Route::group([
     Route::get('followers/{id}', ['as' => 'internal-follower-api', 'uses' => 'FollowersController@show']);
     Route::get('photos', ['as' => 'internal-photos-api', 'uses' => 'PhotosController@index']);
     Route::get('photos/{id}', ['as' => 'internal-photo-api', 'uses' => 'PhotosController@show']);
-    Route::get('comments', ['as' => 'internal-comments-api', 'uses' => 'CommentsController@index']);
+    Route::resource('comments', 'CommentsController', [
+        'only'  => [
+            'index',
+            'show',
+            'update'
+        ],
+        'names' => [
+            'index' => 'internal-comments-api',
+        ]
+    ]);
+
 });

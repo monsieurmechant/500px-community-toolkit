@@ -4,8 +4,7 @@ namespace App\Http\Controllers\InternalApi;
 
 use Cache;
 use \App\Http\Requests\Comments as R;
-use League\Fractal\Pagination\Cursor;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent as E;
 
 class CommentsController extends InternalApiController
 {
@@ -40,9 +39,41 @@ class CommentsController extends InternalApiController
         try {
             $comment = \App\Comment::findOrFail($id);
             return $this->returnItem($comment, 200, $request->query('includes'));
-        } catch (ModelNotFoundException $e) {
+        } catch (E\ModelNotFoundException $e) {
+            return $this->returnError(404, 'This comment does not exist.', 'ModelNotFoundException');
+        }
+    }
+
+    /**
+     * Update the specified resource.
+     *
+     * @param int $id
+     * @param R\UpdateItemRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(int $id, R\UpdateItemRequest $request)
+    {
+        try {
+            $comment = \App\Comment::findOrFail($id);
+            $comment->load(['photo']);
+        } catch (E\ModelNotFoundException $e) {
             return $this->returnError(404, 'This comment does not exist.', 'ModelNotFoundException');
         }
 
+        if (!$request->has('read')) {
+            return $this->returnItem($comment, 201, ['photo']);
+        }
+
+        $comment->setAttribute('read', $request->input('read'));
+        $modifiedComment = $comment;
+
+        try {
+            $comment->save();
+        } catch (\Exception $e) {
+            return $this->returnError(400, 'We could not process your request.');
+        }
+
+
+        return $this->returnItem($modifiedComment, 201, ['photo']);
     }
 }
