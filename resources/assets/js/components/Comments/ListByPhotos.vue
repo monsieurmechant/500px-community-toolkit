@@ -1,16 +1,19 @@
 <template>
-  <div class="columns" v-if="!loading && photos.length > 0">
+  <div class="columns comments-manager" v-if="!loading && photos.length > 0">
     <div class="column is-one-quarter">
       <nav class="panel">
         <p class="panel-heading">
           Unread Comments <span class="tag is-primary">{{ totalUnreadComments }}</span>
         </p>
-        <a class="panel-block is-active" v-for="(photo, i) in photos" @click="thread = i">
-        <span class="panel-icon">
+        <a :class="[i === thread ? 'is-active' : '' ,'panel-block']" v-for="(photo, i) in photos" @click="thread = i">
+           <span class="panel-icon">
+             <abbr title="Mark all as read">
+               <i class="fa fa-eye read-all-button" @click="markAllCommentsRead(photo.id)"></i>
+             </abbr>
+          </span>
           <figure class="image is-24x24">
             <img :src="photo.thumbnail">
           </figure>
-        </span>
           {{ photo.title }} <span class="tag is-primary">{{ unreadComments(photo.comments.data).length }}</span>
         </a>
       </nav>
@@ -55,6 +58,7 @@
           'getCommentsByMedias',
           'getCommentsByUser',
           'markCommentRead',
+          'markAllCommentsRead',
         ]),
         unreadComments(comments) {
           return comments.filter(comment => {
@@ -115,6 +119,5 @@
   .comments-list-enter, .comments-list-leave-to /* comments-list-leave-active for <2.1.8 */ {
     opacity: 0;
     transform: translateY(30px);
-
   }
 </style>

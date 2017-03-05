@@ -15,6 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         \App\Comment::class => \App\Policies\CommentPolicy::class,
+        \App\Photo::class   => \App\Policies\PhotoPolicy::class,
     ];
 
     /**

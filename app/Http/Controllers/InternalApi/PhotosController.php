@@ -54,8 +54,33 @@ class PhotosController extends InternalApiController
             $photo = \App\Photo::findOrFail($id);
             return $this->returnItem($photo, 200, $request->query('includes'));
         } catch (ModelNotFoundException $e) {
-            return $this->returnError(404, 'This account does not exist.', 'ModelNotFoundException');
+            return $this->returnError(404, 'This photo does not exist.', 'ModelNotFoundException');
+        }
+    }
+
+    /**
+     * Update the specified resource.
+     * For the time being the only
+     * interaction is marking all
+     * its comments as read.
+     *
+     * @param int $id
+     * @param R\UpdateItemRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(int $id, R\UpdateItemRequest $request)
+    {
+        try {
+            $photo = \App\Photo::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return $this->returnError(404, 'This photo does not exist.', 'ModelNotFoundException');
         }
 
+        if ($request->has('read_comments')) {
+            \App\Comment::where('photo_id', $id)
+                ->update(['read' => 1]);
+        }
+
+        return $this->returnItem($photo, 201, $request->query('includes'));
     }
 }

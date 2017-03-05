@@ -4,6 +4,7 @@ import {
   GET_MORE_COMMENTS_BY_MEDIAS_SUCCESS,
   GET_COMMENTS_BY_MEDIAS_FAILURE,
   MARK_COMMENT_READ_SUCCESS,
+  MARK_ALL_COMMENT_READ_SUCCESS,
 } from './../mutation-types';
 import Axios from 'axios';
 
@@ -74,8 +75,9 @@ export const mutations = {
     );
 
     state.photos[pIndex].comments.data[cIndex].children.data[chIndex].read = true;
-
-
+  },
+  [MARK_ALL_COMMENT_READ_SUCCESS](state, { photoId }) {
+    state.photos = state.photos.filter(p => p.id !== photoId);
   }
 };
 
@@ -141,6 +143,28 @@ export const actions = {
             {
               commentId: id,
               photoId: response.data.data.photo.data.id
+            }
+        );
+        resolve(response.data);
+      }, response => {
+        reject(response.data);
+      });
+    });
+  },
+  /**
+   * Makes a PUT request to the API to update an entry.
+   * If successful the state will also be updated.
+   * The error will be returned in a promise.
+   */
+  markAllCommentsRead({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      Axios.put(`/internal/photos/${id}`, {
+        read_comments: true,
+      }).then(response => {
+        commit(
+            MARK_ALL_COMMENT_READ_SUCCESS,
+            {
+              photoId: id,
             }
         );
         resolve(response.data);
