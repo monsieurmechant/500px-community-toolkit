@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\Requests;
+namespace App\Http\Services\Calls;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;

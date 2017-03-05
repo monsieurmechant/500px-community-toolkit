@@ -36,8 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Services\Api\CreateApiDataFromModel::class, function ($app) {
             return new \App\Services\Api\CreateApiDataFromModel($app[\League\Fractal\Manager::class]);
         });
-        $this->app->bind(\App\Http\Services\Requests\GetFullFollowerProfile::class, function ($app) {
-            return new \App\Http\Services\Requests\GetFullFollowerProfile($app[\App\Http\Services\FiveHundredPxService::class]);
+        $this->app->bind(\App\Http\Services\Calls\GetFullFollowerProfile::class, function ($app) {
+            return new \App\Http\Services\Calls\GetFullFollowerProfile($app[\App\Http\Services\FiveHundredPxService::class]);
         });
     }
 }

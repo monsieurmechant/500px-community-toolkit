@@ -83,7 +83,7 @@ class User extends Authenticatable
 
     public function photos()
     {
-        return $this>$this->hasMany(\App\Photo::class);
+        return $this->hasMany(\App\Photo::class);
     }
 
     public function comments()

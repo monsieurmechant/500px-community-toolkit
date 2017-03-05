@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: adam
- * Date: 27/02/2017
- * Time: 11:49
- */
 
-namespace Tests\Unit\Jobs;
+namespace Tests\Unit\Jobs\User;
 
 
 use App\Follower;

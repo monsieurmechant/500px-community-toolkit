@@ -45,7 +45,7 @@ class FollowersController extends InternalApiController
         }
 
         return response()->json(
-            resolve(\App\Http\Services\Requests\GetFullFollowerProfile::class)->handle($id, $request->user())
+            resolve(\App\Http\Services\Calls\GetFullFollowerProfile::class)->handle($id, $request->user())
         , 200);
 
     }

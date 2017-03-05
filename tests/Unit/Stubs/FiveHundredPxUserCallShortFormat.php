@@ -9,24 +9,78 @@ use Faker\Factory;
 class FiveHundredPxUserCallShortFormat
 {
 
+    /**
+     * @var int
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $username;
+    /**
+     * @var string
+     */
     public $firstname;
+    /**
+     * @var string
+     */
     public $lastname;
+    /**
+     * @var string
+     */
     public $city;
+    /**
+     * @var string
+     */
     public $country;
+    /**
+     * @var int
+     */
     public $usertype;
+    /**
+     * @var string
+     */
     public $fullname;
+    /**
+     * @var string
+     */
     public $userpic_url;
+    /**
+     * @var string
+     */
     public $userpic_https_url;
+    /**
+     * @var string
+     */
     public $cover_url;
+    /**
+     * @var int
+     */
     public $upgrade_status;
+    /**
+     * @var bool
+     */
     public $store_on;
+    /**
+     * @var int
+     */
     public $affection;
+    /**
+     * @var \stdClass
+     */
     public $avatars;
+    /**
+     * @var int
+     */
     public $followers_count;
+    /**
+     * @var string
+     */
     public $thumbnail_background_url;
 
+    /**
+     * FiveHundredPxUserCallShortFormat constructor.
+     */
     public function __construct()
     {
         $faker = Factory::create();
