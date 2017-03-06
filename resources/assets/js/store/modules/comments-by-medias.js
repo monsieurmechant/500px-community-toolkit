@@ -5,6 +5,8 @@ import {
   GET_COMMENTS_BY_MEDIAS_FAILURE,
   MARK_COMMENT_READ_SUCCESS,
   MARK_ALL_COMMENT_READ_SUCCESS,
+  POSTING_REPLY,
+  REPLY_TO_COMMENT_SUCCESS,
 } from './../mutation-types';
 import Axios from 'axios';
 
@@ -28,6 +30,10 @@ export const mutations = {
   [GET_COMMENTS_BY_MEDIAS_SUCCESS](state, { photos }) {
     state.error = null;
     if (Array.isArray(photos.data)) {
+      state.photos = photos.data.map(p => p.comments.data.map(c => {
+        c.posting_reply = false;
+        return c;
+      }));
       state.photos = photos.data;
     }
     if (photos.hasOwnProperty('meta')) {
@@ -76,6 +82,23 @@ export const mutations = {
   },
   [MARK_ALL_COMMENT_READ_SUCCESS](state, { photoId }) {
     state.photos = state.photos.filter(p => p.id !== photoId);
+  },
+  [POSTING_REPLY](state, commentId) {
+    let cIndex;
+    let pIndex = state.photos.findIndex(p => {
+      return -1 !== p.comments.data.findIndex((c, i) => {
+          cIndex = i;
+          return c.id === commentId;
+      })
+    });
+    state.photos[pIndex].comments.data[cIndex].posting_reply = true;
+  },
+  [REPLY_TO_COMMENT_SUCCESS](state, { comment }) {
+    const pIndex = state.photos.findIndex(p => p.id === comment.photo_id);
+    let cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === comment.parent_id);
+
+    state.photos[pIndex].comments.data[cIndex].children.data.push(comment);
+    state.photos[pIndex].comments.data[cIndex].posting_reply = false;
   }
 };
 
@@ -163,6 +186,25 @@ export const actions = {
             MARK_ALL_COMMENT_READ_SUCCESS,
             {
               photoId: id,
+            }
+        );
+        resolve(response.data);
+      }, response => {
+        reject(response.data);
+      });
+    });
+  },
+  replyToComment({ commit }, { parent_id, body }) {
+    return new Promise((resolve, reject) => {
+      commit(POSTING_REPLY, parent_id);
+      Axios.post(`/internal/comments/`, {
+        parent_id,
+        body,
+      }).then(response => {
+        commit(
+            REPLY_TO_COMMENT_SUCCESS,
+            {
+              comment: response.data.data,
             }
         );
         resolve(response.data);

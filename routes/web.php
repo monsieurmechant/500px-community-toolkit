@@ -34,7 +34,7 @@ Route::group([
         'only'  => [
             'index',
             'show',
-            'update'
+            'update',
         ],
         'names' => [
             'index' => 'internal-photos-api',
@@ -45,7 +45,8 @@ Route::group([
         'only'  => [
             'index',
             'show',
-            'update'
+            'update',
+            'store',
         ],
         'names' => [
             'index' => 'internal-comments-api',

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\InternalApi;
 
 use Cache;
+use App\Jobs\StoreCommentFromApi;
 use \App\Http\Requests\Comments as R;
 use Illuminate\Database\Eloquent as E;
+use App\Http\Services\FiveHundredPxService;
 
 class CommentsController extends InternalApiController
 {
@@ -45,6 +47,37 @@ class CommentsController extends InternalApiController
     }
 
     /**
+     * Post a comment to the API and persist it to the Database.
+     *
+     * @param R\PostItemRequest $request
+     * @param FiveHundredPxService $api
+     * @return \Illuminate\Http\Response
+     */
+    public function store(R\PostItemRequest $request, FiveHundredPxService $api)
+    {
+        try {
+            $api->authenticateClient($request->user());
+
+            $comment = $api->post(
+                'comments/' . $request->input('parent_id') . '/comments',
+                [
+                    'query' => [
+                        'body' => $request->input('body'),
+                    ]
+                ]
+            );
+        } catch (\App\Exceptions\HttpRequestException $e) {
+            return $this->returnError($e->getCode(), $e->getMessage(), 'HttpRequestException');
+        }
+        $photoId = \App\Comment::find($request->input('parent_id'))->getAttribute('photo_id');
+
+        $this->dispatch((new StoreCommentFromApi($comment->comment, $photoId))->onConnection('sync'));
+
+        return $this->returnItem(\App\Comment::find($comment->comment->id), 201);
+
+    }
+
+    /**
      * Update the specified resource.
      *
      * @param int $id
@@ -72,7 +105,6 @@ class CommentsController extends InternalApiController
         } catch (\Exception $e) {
             return $this->returnError(400, 'We could not process your request.');
         }
-
 
         return $this->returnItem($modifiedComment, 201, ['photo']);
     }

@@ -53,14 +53,6 @@ class Comment extends Model
         'posted_at',
     ];
 
-    /**
-     * The event map for the model.
-     *
-     * @var array
-     */
-    protected $events = [
-        'created' => UserCreated::class,
-    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

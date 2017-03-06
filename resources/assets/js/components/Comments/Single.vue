@@ -1,5 +1,5 @@
 <template>
-  <article class="media comment">
+  <article :class="[comment.posting_reply ? 'is-disabled':'', 'media', 'comment']">
     <figure class="media-left">
       <p class="image is-64x64">
         <img :src="comment.follower.data.avatar" v-if="!photoThumbnail">
@@ -54,11 +54,22 @@
           <a class="level-item" @click="$emit('requestHistory', comment.follower.data.id)">
             <span class="icon is-small"><i class="fa fa-history"></i></span>
           </a>
-          <a class="level-item">
+          <a class="level-item" @click="replying = !replying">
             <span class="icon is-small"><i class="fa fa-reply"></i></span>
           </a>
         </div>
       </nav>
+      <article class="media" v-if="replying">
+        <div class="media-content">
+          <p class="control">
+            <textarea class="textarea" placeholder="Add a comment..." v-model="reply"></textarea>
+          </p>
+          <p class="control">
+            <button class="button" @click="postReply">Reply</button>
+          </p>
+        </div>
+      </article>
+
     </div>
     <div class="media-right" v-if="interactions">
       <a class="button is-primary" @click="$emit('markRead', comment.id)" v-if="!comment.read">
@@ -68,6 +79,7 @@
       </a>
     </div>
   </article>
+
 </template>
 <style>
 
@@ -76,11 +88,22 @@
   const moment = require('moment-timezone');
   export default{
     name: 'Comment',
+    data() {
+      return {
+        replying: false,
+        reply: null,
+      }
+    },
     methods: {
       timeFromUser(dateTime) {
         return moment.tz(dateTime.date, dateTime.timezone).
         tz(moment.tz.guess()).fromNow();
       },
+      postReply() {
+        this.replying = false;
+        this.$emit('reply', { body: this.reply, parent_id: this.comment.id })
+        this.reply = null;
+      }
     },
     props: {
       comment: {
@@ -97,6 +120,7 @@
       }
     }
   };
+
 
 
 </script>

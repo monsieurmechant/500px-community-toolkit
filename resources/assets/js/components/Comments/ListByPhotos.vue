@@ -26,6 +26,7 @@
                   :comment="comment"
                   @requestHistory="displayHistory"
                   @markRead="markCommentRead"
+                  @reply="replyToComment"
           >
           </Single>
         </transition-group>
@@ -59,6 +60,7 @@
           'getCommentsByUser',
           'markCommentRead',
           'markAllCommentsRead',
+          'replyToComment'
         ]),
         unreadComments(comments) {
           return comments.filter(comment => {
@@ -108,7 +110,9 @@
         Loader, Single, PhotoCard, History
       },
       mounted() {
-        this.getCommentsByMedias();
+        if (!this.loading && !this.loaded){
+          this.getCommentsByMedias();
+        }
       }
   }
 

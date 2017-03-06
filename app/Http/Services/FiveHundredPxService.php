@@ -26,14 +26,15 @@ class FiveHundredPxService
      * @param User $user
      * @return FiveHundredPxService
      */
-    public function authenticateClient(User $user):self
+    public function authenticateClient(User $user): self
     {
         $stack = HandlerStack::create();
 
         $middleware = new Oauth1([
             'token'           => $user->getAttribute('access_token'),
             'token_secret'    => $user->getAttribute('access_token_secret'),
-            'consumer_key'    => getenv('500PX_KEY')
+            'consumer_key'    => getenv('500PX_KEY'),
+            'consumer_secret' => getenv('500PX_SECRET')
         ]);
         $stack->push($middleware);
 
@@ -96,7 +97,8 @@ class FiveHundredPxService
         try {
             $request = $this->client->request($method, $endpoint, array_merge(['auth' => 'oauth'], $parameters));
         } catch (ClientException $e) {
-            throw new HttpRequestException('There was a problem with your request. (' . $e->getMessage() . ')');
+            throw new HttpRequestException('There was a problem with your request. (' . $e->getMessage() . ')',
+                $e->getCode());
         }
         if ($request->getStatusCode() !== 200) {
             throw new HttpRequestException('There was a problem with your request. (' . $request->getStatusCode() . ')',
