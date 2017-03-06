@@ -7,7 +7,7 @@
     </div>
     <header class="card-header">
       <p class="card-header-title">
-        {{ photo.title }}
+        <a :href="photo.url" target="_blank">{{ photo.title }}</a>
       </p>
     </header>
     <div class="card-content">
