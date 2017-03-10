@@ -27,6 +27,7 @@ class Comment extends Model
         'photo_id',
         'follower_id',
         'posted_at',
+        'read',
     ];
 
     /**
