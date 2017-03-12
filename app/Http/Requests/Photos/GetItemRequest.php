@@ -25,7 +25,7 @@ class GetItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'includes' => 'string|in:user,comments',
+            'includes' => 'array|in:user,comments',
         ];
     }
 }

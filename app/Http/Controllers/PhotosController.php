@@ -16,7 +16,7 @@ class PhotosController extends Controller
             $this->dispatch(new J\FetchNewComments($request->user()));
             Redis::setex('photos.refreshed.recently.' . $request->user()->getAttribute('id'), 15 * 60, true);
         }
-
+        Redis::setex('user.on.photos.page.' . $request->user()->getAttribute('id'), 30 * 60, true);
         return view('photos.index');
     }
 }

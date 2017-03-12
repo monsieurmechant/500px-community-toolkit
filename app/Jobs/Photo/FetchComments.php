@@ -8,6 +8,7 @@ use App\Follower;
 use Illuminate\Bus\Queueable;
 use App\Jobs\StoreCommentFromApi;
 use App\Jobs\StoreFollowerFromApi;
+use App\Events\PhotoHasNewComments;
 use App\Exceptions\JobDoneException;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,10 +22,11 @@ class FetchComments implements ShouldQueue
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * @var int
-     */
+    /** @var int $mediaId */
     private $mediaId;
+
+    /** @var int $newComments */
+    private $newComments = 0;
 
     /**
      * Create a new job instance.
@@ -72,7 +74,13 @@ class FetchComments implements ShouldQueue
                 $this->saveCommentsPage($comments->comments);
             }
         } catch (JobDoneException $e) {
+            if ($this->newComments > 0) {
+                event(new PhotoHasNewComments($photo));
+            }
             return;
+        }
+        if ($this->newComments > 0) {
+            event(new PhotoHasNewComments($photo));
         }
 
     }
@@ -96,6 +104,7 @@ class FetchComments implements ShouldQueue
                 Comment::findOrFail($comment->id);
             } catch (ModelNotFoundException $e) {
                 dispatch((new StoreCommentFromApi($comment, (int)$this->mediaId))->onConnection('sync'));
+                $this->newComments++;
                 continue;
             }
             throw new JobDoneException();

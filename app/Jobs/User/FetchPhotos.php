@@ -2,6 +2,7 @@
 
 namespace App\Jobs\User;
 
+use App\Events\UserHasNewPhotos;
 use App\User;
 use App\Photo;
 use Illuminate\Bus\Queueable;
@@ -20,6 +21,9 @@ class FetchPhotos implements ShouldQueue
 
     /** @var int $userId */
     private $userId;
+
+    /** @var int $newPhotos */
+    private $newPhotos = 0;
 
     /**
      * Create a new job instance.
@@ -71,9 +75,14 @@ class FetchPhotos implements ShouldQueue
                 $this->savePhotosPage($photos->photos);
             }
         } catch (JobDoneException $e) {
+            if ($this->newPhotos > 0) {
+                event(new UserHasNewPhotos($user->getAttribute('id')));
+            }
             return;
         }
-
+        if ($this->newPhotos > 0) {
+            event(new UserHasNewPhotos($user->getAttribute('id')));
+        }
     }
 
     /**
@@ -91,6 +100,7 @@ class FetchPhotos implements ShouldQueue
                 Photo::findOrFail($photo->id);
             } catch (ModelNotFoundException $e) {
                 $this->persistPhoto($photo);
+                $this->newPhotos++;
                 continue;
             }
 

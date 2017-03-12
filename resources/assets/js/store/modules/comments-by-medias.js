@@ -3,12 +3,16 @@ import {
   GET_COMMENTS_BY_MEDIAS_SUCCESS,
   GET_MORE_COMMENTS_BY_MEDIAS_SUCCESS,
   GET_COMMENTS_BY_MEDIAS_FAILURE,
+  GET_NEW_COMMENTS_BY_MEDIAS_SUCCESS,
+  GET_NEW_PHOTO_COMMENTS_SUCCESS,
   MARK_COMMENT_READ_SUCCESS,
   MARK_ALL_COMMENT_READ_SUCCESS,
   POSTING_REPLY,
   REPLY_TO_COMMENT_SUCCESS,
 } from './../mutation-types';
 import Axios from 'axios';
+
+import moment from 'moment';
 
 const state = {
   isFetching: false,
@@ -30,11 +34,13 @@ export const mutations = {
   [GET_COMMENTS_BY_MEDIAS_SUCCESS](state, { photos }) {
     state.error = null;
     if (Array.isArray(photos.data)) {
-      state.photos = photos.data.map(p => p.comments.data.map(c => {
-        c.posting_reply = false;
-        return c;
-      }));
-      state.photos = photos.data;
+      state.photos = photos.data.map(p => {
+        p.comments.data = p.comments.data.map(c => {
+          c.posting_reply = false;
+          return c;
+        });
+        return p;
+      });
     }
     if (photos.hasOwnProperty('meta')) {
       state.cursor = {
@@ -46,6 +52,18 @@ export const mutations = {
     }
     state.loaded = true;
     state.isFetching = false;
+  },
+  [GET_NEW_COMMENTS_BY_MEDIAS_SUCCESS](state, { photos }) {
+    if (Array.isArray(photos.data)) {
+      photos = photos.data.map(p => {
+        p.comments.data = p.comments.data.map(c => {
+          c.posting_reply = false;
+          return c;
+        });
+        return p;
+      });
+      state.photos.unshift(...photos);
+    }
   },
   [GET_MORE_COMMENTS_BY_MEDIAS_SUCCESS](state, { photos }) {
     state.error = null;
@@ -67,9 +85,9 @@ export const mutations = {
     let cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === commentId);
 
     const parentId = state.photos[pIndex].comments.data[cIndex].parent_id
-    if (parentId === null)
-    {
-      return state.photos[pIndex].comments.data[cIndex].read = true;;
+    if (parentId === null) {
+      return state.photos[pIndex].comments.data[cIndex].read = true;
+      ;
     }
 
     cIndex = state.photos[pIndex].comments.data.findIndex(c => c.id === parentId);
@@ -87,9 +105,9 @@ export const mutations = {
     let cIndex;
     let pIndex = state.photos.findIndex(p => {
       return -1 !== p.comments.data.findIndex((c, i) => {
-          cIndex = i;
-          return c.id === commentId;
-      })
+            cIndex = i;
+            return c.id === commentId;
+          })
     });
     state.photos[pIndex].comments.data[cIndex].posting_reply = true;
   },
@@ -99,6 +117,18 @@ export const mutations = {
 
     state.photos[pIndex].comments.data[cIndex].children.data.push(comment);
     state.photos[pIndex].comments.data[cIndex].posting_reply = false;
+  },
+  [GET_NEW_PHOTO_COMMENTS_SUCCESS](state, { photo }) {
+    let pIndex = state.photos.findIndex(p => p.id === photo.id);
+    if (pIndex === -1) {
+      state.photos.unshift(photo);
+      return;
+    }
+    const firstExistingComment = photo.comments.data.findIndex(c => {
+      return c.id === state.photos[pIndex].comments.data[0].id;
+    });
+
+    state.photos[pIndex].comments.data.unshift(...photo.comments.data.slice(0, firstExistingComment));
   }
 };
 
@@ -115,8 +145,32 @@ export const actions = {
           unread_comments: 1,
           includes: ['comments'],
         },
+      }).then(({ data }) => {
+        commit(GET_COMMENTS_BY_MEDIAS_SUCCESS, { photos: data });
+        resolve(data);
+      }).catch(response => {
+        commit(GET_COMMENTS_BY_MEDIAS_FAILURE, response.data);
+        reject(response.data);
+      });
+    });
+  },
+  /**
+   * Requests the most recent photos from
+   * the /photos API endpoint.
+   */
+  getNewCommentsByMedias({ state, commit }) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        unread_comments: 1,
+        includes: ['comments'],
+      };
+      if (state.photos.length > 0) {
+        params.to = moment(state.photos[0].created_at).add(1, 'm').format('YYYY-MM-DD HH:mm:ss');
+      }
+      Axios.get('/internal/photos', {
+        params
       }).then(response => {
-        commit(GET_COMMENTS_BY_MEDIAS_SUCCESS, { photos: response.data });
+        commit(GET_NEW_COMMENTS_BY_MEDIAS_SUCCESS, { photos: response.data });
         resolve(response.data);
       }).catch(response => {
         commit(GET_COMMENTS_BY_MEDIAS_FAILURE, response.data);
@@ -214,6 +268,25 @@ export const actions = {
     });
   },
   /**
+   * Requests the most recent comments from
+   * a photo.
+   */
+  getNewCommentsFromPhoto({ commit }, photoId) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        includes: ['comments'],
+      };
+      Axios.get(`/internal/photos/${photoId}`, {
+        params
+      }).then(response => {
+        commit(GET_NEW_PHOTO_COMMENTS_SUCCESS, { photo: response.data.data });
+        resolve(response.data);
+      }).catch(response => {
+        reject(response.data);
+      });
+    });
+  },
+  /**
    * Updates the state when a photo is updated.
    */
   // photoUpdated: ({ commit }, { id, data }) => commit(UPDATE_PHOTO_SUCCESS, { id, data }),
@@ -270,6 +343,9 @@ export const getters = {
    * @return int
    */
   totalUnreadComments: state => {
+    if (state.photos.length === 0) {
+      return 0;
+    }
     return state.photos.reduce((acc, photo) => {
       return acc + photo.comments.data.filter(comment => {
             return !comment.read;

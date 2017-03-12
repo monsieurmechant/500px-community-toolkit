@@ -94,22 +94,4 @@ class FetchFollowers implements ShouldQueue
             }
         }
     }
-
-    /**
-     * Persist a followed user to the database
-     *
-     * @param $follower
-     */
-    private function persistFollower($follower)
-    {
-        Follower::create([
-            'id'        => $follower->id,
-            'username'  => $follower->username ?? null,
-            'name'      => $follower->fullname ?? null,
-            'avatar'    => $follower->userpic_url ?? null,
-            'cover'     => $follower->cover_url ?? null,
-            'followers' => (int)$follower->followers_count >= 0 ? (int)$follower->followers_count : 0,
-            'affection' => (int)$follower->affection >= 0 ? (int)$follower->affection : 0,
-        ]);
-    }
 }

@@ -17,8 +17,11 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
+    "jquery": "^3.1.1",
+    "laravel-echo": "^1.2.5",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.11",
+    "pusher-js": "^4.0.0",
     "vuex": "^2.2.1"
   }
 }

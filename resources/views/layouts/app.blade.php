@@ -23,6 +23,8 @@
     <script>
       window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
+            'user' => Auth::user() ?? null,
+            'pusherKey' => config('broadcasting.connections.pusher.key') ?? null,
         ]) !!};
     </script>
 </head>
@@ -40,13 +42,15 @@
             </div>
 
             <div id="nav-menu" class="nav-right nav-menu">
-                <a class="nav-item " href="{{ route('photos') }}">
-                    My Comments&nbsp;<comments-counter></comments-counter>
-                </a>
-                <a class="nav-item " href="{{ route('followers') }}">
-                    My Community
-                </a>
-
+                @if(Auth::check())
+                    <a class="nav-item " href="{{ route('photos') }}">
+                        My Comments&nbsp;
+                        <comments-counter></comments-counter>
+                    </a>
+                    <a class="nav-item " href="{{ route('followers') }}">
+                        My Community
+                    </a>
+                @endif
                 <span class="nav-item">
             <a id="500px" class="button" target="_blank"
                href="http://500px.com/monsieurmechant">

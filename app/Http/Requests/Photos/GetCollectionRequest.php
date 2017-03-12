@@ -28,7 +28,10 @@ class GetCollectionRequest extends FormRequest
             'includes'        => 'array|in:user,comments',
             'unread_comments' => 'boolean',
             'cursor'          => 'string',
-            'previous'        => 'string'
+            'previous'        => 'string',
+            'from'            => 'date',
+            'to'              => 'date',
+
         ];
     }
 }

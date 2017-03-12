@@ -57,10 +57,12 @@
       methods: {
         ...mapActions([
           'getCommentsByMedias',
+          'getNewCommentsByMedias',
           'getCommentsByUser',
           'markCommentRead',
           'markAllCommentsRead',
-          'replyToComment'
+          'replyToComment',
+          'getNewCommentsFromPhoto',
         ]),
         unreadComments(comments) {
           return comments.filter(comment => {
@@ -113,8 +115,16 @@
         if (!this.loading && !this.loaded){
           this.getCommentsByMedias();
         }
+        Echo.private(`user.${Laravel.user.id}`)
+        .listen('UserHasNewPhotos', e => {
+          this.getNewCommentsByMedias();
+        })
+        .listen('PhotoHasNewComments', e => {
+          this.getNewCommentsFromPhoto(e.photo.id);
+        });
       }
   }
+
 
 
 
@@ -124,6 +134,7 @@
   .comments-list-enter-active, .comments-list-leave-active {
     transition: all .8s;
   }
+
   .comments-list-enter, .comments-list-leave-to {
     opacity: 0;
   }
