@@ -23,27 +23,35 @@
     <script>
       window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
+            'user' => Auth::user() ?? null,
+            'pusherKey' => config('broadcasting.connections.pusher.key') ?? null,
         ]) !!};
     </script>
 </head>
 <body>
-<div class="container">
-    <nav class="nav">
-        <div class="nav-left">
-            <a class="nav-item is-brand" href="{{ route('home') }}">
+<div id="app">
+    <div class="container">
+        <nav class="nav">
+            <div class="nav-left">
+                <a class="nav-item is-brand" href="{{ route('home') }}">
                 <span class="icon">
                     <i class="fa fa-wrench"></i>
                 </span>
-                {{ config('app.name', '500px Community Toolkit') }}
-            </a>
-        </div>
+                    {{ config('app.name', '500px Community Toolkit') }}
+                </a>
+            </div>
 
-        <div id="nav-menu" class="nav-right nav-menu">
-            <a class="nav-item " href="{{ route('followers') }}">
-                My Community
-            </a>
-
-            <span class="nav-item">
+            <div id="nav-menu" class="nav-right nav-menu">
+                @if(Auth::check())
+                    <a class="nav-item " href="{{ route('photos') }}">
+                        My Comments&nbsp;
+                        <comments-counter></comments-counter>
+                    </a>
+                    <a class="nav-item " href="{{ route('followers') }}">
+                        My Community
+                    </a>
+                @endif
+                <span class="nav-item">
             <a id="500px" class="button" target="_blank"
                href="http://500px.com/monsieurmechant">
               <span class="icon">
@@ -53,13 +61,15 @@
             </a>
           </span>
 
-        </div>
-    </nav>
+            </div>
+        </nav>
 
+    </div>
+    <div>
+        @yield('content')
+    </div>
 </div>
-<div id="app">
-    @yield('content')
-</div>
+
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>

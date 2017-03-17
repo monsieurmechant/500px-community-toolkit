@@ -2,6 +2,7 @@
 
 namespace App\Jobs\User;
 
+use App\Events\UserHasNewPhotos;
 use App\User;
 use App\Photo;
 use Illuminate\Bus\Queueable;
@@ -20,6 +21,9 @@ class FetchPhotos implements ShouldQueue
 
     /** @var int $userId */
     private $userId;
+
+    /** @var int $newPhotos */
+    private $newPhotos = 0;
 
     /**
      * Create a new job instance.
@@ -71,9 +75,14 @@ class FetchPhotos implements ShouldQueue
                 $this->savePhotosPage($photos->photos);
             }
         } catch (JobDoneException $e) {
+            if ($this->newPhotos > 0) {
+                event(new UserHasNewPhotos($user->getAttribute('id')));
+            }
             return;
         }
-
+        if ($this->newPhotos > 0) {
+            event(new UserHasNewPhotos($user->getAttribute('id')));
+        }
     }
 
     /**
@@ -91,6 +100,7 @@ class FetchPhotos implements ShouldQueue
                 Photo::findOrFail($photo->id);
             } catch (ModelNotFoundException $e) {
                 $this->persistPhoto($photo);
+                $this->newPhotos++;
                 continue;
             }
 
@@ -108,9 +118,9 @@ class FetchPhotos implements ShouldQueue
         $url = $urlFull = null;
 
         foreach ($photo->images as $image) {
-            if ((int) $image->size === 3) {
+            if ((int)$image->size === 3) {
                 $url = $image->https_url;
-            } elseif ((int) $image->size === 5) {
+            } elseif ((int)$image->size === 5) {
                 $urlFull = $image->https_url;
             }
         }
@@ -119,10 +129,13 @@ class FetchPhotos implements ShouldQueue
             'id'          => $photo->id,
             'url'         => $url,
             'url_full'    => $urlFull,
+            'link'        => $photo->url,
             'name'        => $photo->name ?? null,
             'description' => $photo->description ?? null,
             'privacy'     => (bool)$photo->privacy,
             'user_id'     => $this->userId,
+            'posted_at'   => \Carbon\Carbon::createFromFormat(\DateTime::ATOM, $photo->created_at)
+                ->setTimezone(config('app.timezone')),
         ]);
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Followers;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetFollowerProfileRequest extends FormRequest
+class GetFollowersRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +25,9 @@ class GetFollowerProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'full' => 'boolean'
+            'order-by' => 'string|in:followers,affection',
+            'limit'    => 'numeric|max:50',
+            'skip'     => 'numeric'
         ];
     }
 }

@@ -27,6 +27,7 @@ class Comment extends Model
         'photo_id',
         'follower_id',
         'posted_at',
+        'read',
     ];
 
     /**
@@ -39,6 +40,7 @@ class Comment extends Model
         'photo_id'    => 'integer',
         'parent_id'   => 'integer',
         'follower_id' => 'integer',
+        'read'        => 'boolean',
     ];
 
     /**
@@ -51,6 +53,7 @@ class Comment extends Model
         'updated_at',
         'posted_at',
     ];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

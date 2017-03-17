@@ -21,6 +21,7 @@ class CreateCommentsTable extends Migration
             $table->unsignedInteger('follower_id');
             $table->unsignedInteger('photo_id');
             $table->timestamp('posted_at')->nullable();
+            $table->boolean('read')->default(0);
             $table->timestamps();
         });
 

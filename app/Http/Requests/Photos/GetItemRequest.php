@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Photos;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetFollowersRequest extends FormRequest
+class GetItemRequest extends FormRequest
 {
 
     /**
@@ -25,9 +25,7 @@ class GetFollowersRequest extends FormRequest
     public function rules()
     {
         return [
-            'order-by' => 'string|in:followers,affection',
-            'limit'    => 'numeric|max:50',
-            'skip'     => 'numeric'
+            'includes' => 'array|in:user,comments',
         ];
     }
 }

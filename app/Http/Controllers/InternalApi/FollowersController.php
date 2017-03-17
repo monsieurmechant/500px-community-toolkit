@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\InternalApi;
 
 use App\Jobs\GetFullFollowerProfile;
-use App\Http\Requests\GetFollowersRequest;
-use App\Http\Requests\GetFollowerProfileRequest;
+use App\Http\Requests\Followers\GetFollowersRequest;
+use App\Http\Requests\Followers\GetFollowerProfileRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FollowersController extends InternalApiController
@@ -45,7 +45,7 @@ class FollowersController extends InternalApiController
         }
 
         return response()->json(
-            resolve(\App\Http\Services\Requests\GetFullFollowerProfile::class)->handle($id, $request->user())
+            resolve(\App\Http\Services\Calls\GetFullFollowerProfile::class)->handle($id, $request->user())
         , 200);
 
     }

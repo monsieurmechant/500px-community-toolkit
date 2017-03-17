@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: adam
- * Date: 27/02/2017
- * Time: 11:49
- */
 
-namespace Tests\Unit\Jobs;
+namespace Tests\Unit\Jobs\User;
 
 
 use App\Follower;
@@ -25,7 +19,7 @@ class FetchFollowersTest extends TestCase
 
     public function testItCallsTheUserFollowersApiEndpoint()
     {
-        \App\User::unsetEventDispatcher();
+        $this->disableModelEvents();
         $user = factory(\App\User::class)->create();
 
         $apiService = m::mock(\App\Http\Services\FiveHundredPxService::class);
@@ -49,7 +43,7 @@ class FetchFollowersTest extends TestCase
 
     public function testItAssociatesFollowersAccountsToTheUser()
     {
-        \App\User::unsetEventDispatcher();
+        $this->disableModelEvents();
         $user = factory(\App\User::class)->create();
         $this->assertEquals(0, count($user->followers));
 
@@ -99,7 +93,7 @@ class FetchFollowersTest extends TestCase
         $callResponse->followers[0]->setFollowersCount(12345678);
         $callResponse->followers[1]->setFollowersCount(87654321);
 
-        \App\User::unsetEventDispatcher();
+        $this->disableModelEvents();
         $user = factory(\App\User::class)->create();
 
         $apiService = m::mock(\App\Http\Services\FiveHundredPxService::class);
@@ -121,7 +115,7 @@ class FetchFollowersTest extends TestCase
         $callResponse->followers[0]->setFollowersCount(-2);
         $callResponse->followers[1]->setAffection(-2);
 
-        \App\User::unsetEventDispatcher();
+        $this->disableModelEvents();
         $user = factory(\App\User::class)->create();
 
         $apiService = m::mock(\App\Http\Services\FiveHundredPxService::class);

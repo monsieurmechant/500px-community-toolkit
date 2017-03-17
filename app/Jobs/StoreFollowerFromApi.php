@@ -39,7 +39,6 @@ class StoreFollowerFromApi implements ShouldQueue
             'username'  => $this->follower->username ?? null,
             'name'      => $this->follower->fullname ?? null,
             'avatar'    => $this->follower->userpic_url ?? null,
-            'cover'     => $this->follower->cover_url ?? null,
             'followers' => (int)$this->follower->followers_count >= 0 ? (int)$this->follower->followers_count : 0,
             'affection' => (int)$this->follower->affection >= 0 ? (int)$this->follower->affection : 0,
         ]);

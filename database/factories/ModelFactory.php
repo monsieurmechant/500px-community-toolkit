@@ -36,3 +36,34 @@ $factory->define(App\Follower::class, function (Faker\Generator $faker) {
         'affection' => $faker->numberBetween(0, 6000000),
     ];
 });
+
+$factory->define(App\Photo::class, function (Faker\Generator $faker) {
+    return [
+        'id'          => $faker->randomNumber(8),
+        'name'        => $faker->name,
+        'description' => $faker->realText(),
+        'privacy'     => $faker->boolean(95),
+        'link'        => $faker->url,
+        'url'         => "http://fillmurray.com/250/250",
+        'url_full'    => "http://fillmurray.com/1280/800",
+        'posted_at'   => $faker->dateTimeBetween('-2 year', 'now'),
+        'user_id'     => function () {
+            return factory(App\User::class)->create()->id;
+        },
+    ];
+});
+
+$factory->define(App\Comment::class, function (Faker\Generator $faker) {
+    return [
+        'id'          => $faker->randomNumber(8),
+        'body'        => $faker->realText(),
+        'posted_at'   => $faker->dateTimeBetween('-1 year', 'now'),
+        'read'        => $faker->boolean(70),
+        'follower_id' => function () {
+            return factory(App\Follower::class)->create()->id;
+        },
+        'photo_id'    => function () {
+            return factory(App\Photo::class)->create()->id;
+        },
+    ];
+});

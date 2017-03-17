@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->nullable();
             $table->string('avatar')->nullable();
             $table->unsignedInteger('followers_count')->default(0);
+            $table->string('timezone')->default(config('app.timezone'));
             $table->string('access_token')->unique();
             $table->string('access_token_secret', 1024);
 

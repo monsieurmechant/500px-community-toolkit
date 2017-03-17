@@ -25,10 +25,12 @@ class Photo extends Model
         'id',
         'url',
         'url_full',
+        'link',
         'name',
         'description',
         'privacy',
         'user_id',
+        'posted_at',
     ];
 
     /**
@@ -62,8 +64,23 @@ class Photo extends Model
             'comments' => function ($query) {
                 $query->whereNull('parent_id');
             },
-            'comments.children'
+            'comments.children',
+            'comments.follower',
         ]);
+    }
+
+    /**
+     * Returns only the photos that have had new comments
+     * Also Eager loads the comments and their children.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeOnlyWithNewComments($query)
+    {
+        return $query->whereHas('comments', function ($query) {
+            $query->where('read', '=', 0);
+        });
     }
 
     /**

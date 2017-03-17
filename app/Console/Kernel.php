@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\Comments\FetchComments::class,
+        Commands\Comments\FetchPhotos::class,
     ];
 
     /**

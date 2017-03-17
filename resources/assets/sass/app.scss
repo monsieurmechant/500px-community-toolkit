@@ -6,3 +6,20 @@
 @import "variables";
 
 @import "node_modules/bulma/bulma";
+
+.page-header {
+  margin-bottom: 3em;
+}
+.comments-manager {
+  .panel-block, .panel-block.is-active {
+    .read-all-button {
+      color: $grey-light;
+      &:hover {
+        color: $green;
+      }
+    }
+  }
+  article.media.comment.is-disabled {
+    opacity: 0.5;
+  }
+}
