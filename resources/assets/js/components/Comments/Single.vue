@@ -61,6 +61,10 @@
       </nav>
       <article class="media" v-if="replying">
         <div class="media-content">
+          <div class="block control">
+              <a class="button is-outlined" v-for="quickReply in quickReplies" @click="reply = quickReply">{{ quickReply }}</a>
+          </div>
+
           <p class="control">
             <textarea class="textarea" placeholder="Add a comment..." v-model="reply"></textarea>
           </p>
@@ -92,6 +96,7 @@
       return {
         replying: false,
         reply: null,
+        quickReplies: ['Thanks!', 'Thank you!', 'Glad you like it!'],
       }
     },
     methods: {
