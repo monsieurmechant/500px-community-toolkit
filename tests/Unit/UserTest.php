@@ -56,8 +56,6 @@ class UserTest extends TestCase
 
     public function testItCanAddAndRemoveQuickReplies()
     {
-        $this->assertEquals(0, count($this->user->getAttribute('quick_replies')));
-
         $this->user->addQuickReply('Foo');
         $this->user->save();
 
@@ -76,9 +74,6 @@ class UserTest extends TestCase
         $this->user->save();
 
         $this->assertEquals(2, count($this->user->getAttribute('quick_replies')));
-        $this->assertContains('Foo', $this->user->getAttribute('quick_replies'));
-        $this->assertContains('Bizz', $this->user->getAttribute('quick_replies'));
-        $this->assertNotContains('Bar', $this->user->getAttribute('quick_replies'));
-        $this->assertNotContains('Buzz', $this->user->getAttribute('quick_replies'));
+        $this->assertEquals(['Foo', 'Bizz'], $this->user->getAttribute('quick_replies'));
     }
 }
