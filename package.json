@@ -13,16 +13,17 @@
     "babel-preset-latest": "^6.24.0",
     "bulma": "^0.3.1",
     "graceful-fs": "^4.1.11",
+    "laravel-echo": "^1.2.5",
     "laravel-mix": "^0.8.1",
     "lodash": "^4.17.4",
-    "vue": "^2.1.10",
-    "laravel-echo": "^1.2.5",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.11",
     "pusher-js": "^4.0.0",
+    "vue": "^2.1.10",
     "vuex": "^2.2.1"
   },
   "dependencies": {
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "vue-router": "^2.4.0"
   }
 }

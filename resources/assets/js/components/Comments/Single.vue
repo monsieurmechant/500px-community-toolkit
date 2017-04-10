@@ -76,7 +76,7 @@
 
     </div>
     <div class="media-right" v-if="interactions">
-      <a class="button is-primary" @click="$emit('markRead', comment.id)" v-if="!comment.read">
+      <a class="button is-primary mark-read" @click="$emit('markRead', comment.id)" v-if="!comment.read">
               <span class="icon is-small">
                 <i class="fa fa-eye"></i>
               </span>
