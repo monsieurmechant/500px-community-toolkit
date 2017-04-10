@@ -11,15 +11,20 @@
 |
 */
 
+// Home
+Route::get('/', function () {
+    return redirect()->route('home');
+})->middleware('auth');
+
+// Auth
 Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 Route::get('auth/500px', ['as' => 'auth-500px', 'uses' => 'Auth\AuthController@redirectToProvider']);
 Route::get('auth/500px/callback', 'Auth\AuthController@handleProviderCallback');
 
-Route::group(['middleware' => 'auth'], function () {
+// JS SPA
+Route::group(['middleware' => 'auth', 'prefix' => 'app'], function () {
     Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
     Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
-    Route::get('/followers', ['as' => 'followers', 'uses' => 'FollowersController@index']);
-    Route::get('/photos', ['as' => 'photos', 'uses' => 'PhotosController@index']);
 });
 
 // Internal API
@@ -38,7 +43,7 @@ Route::group([
         ],
         'names' => [
             'index' => 'internal-photos-api',
-            'show' => 'internal-photo-api',
+            'show'  => 'internal-photo-api',
         ]
     ]);
     Route::resource('comments', 'CommentsController', [

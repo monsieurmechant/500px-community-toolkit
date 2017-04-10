@@ -29,13 +29,38 @@
     </script>
 </head>
 <body>
-<div id="app">
+<div id="landing">
+    <div class="container">
+        <nav class="nav">
+            <div class="nav-left">
+                <a class="nav-item is-brand" href="{{ route('home') }}">
+                <span class="icon">
+                    <i class="fa fa-wrench"></i>
+                </span>
+                    {{ config('app.name', '500px Community Toolkit') }}
+                </a>
+            </div>
+
+            <div id="nav-menu" class="nav-right nav-menu">
+                <span class="nav-item">
+            <a id="500px" class="button" target="_blank"
+               href="http://500px.com/monsieurmechant">
+              <span class="icon">
+                <i class="fa fa-500px"></i>
+              </span>
+              <span>Follow Me</span>
+            </a>
+          </span>
+
+            </div>
+        </nav>
+
+    </div>
+    <div>
+        @yield('content')
+    </div>
 </div>
 
 
-<!-- Scripts -->
-<script src="{{ asset('js/manifest.js') }}"></script>
-<script src="{{ asset('js/vendor.js') }}"></script>
-<script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

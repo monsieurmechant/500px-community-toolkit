@@ -34,7 +34,7 @@ class CommentsTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $photos, $unreadComments, $readComment) {
             $browser->loginAs($user)
-                ->visit('/photos')
+                ->visit('/app/#/comments')
                 ->waitFor('.comments-manager', 3)
                 ->assertSee($photos->first()->getAttribute('name'))
                 ->assertDontSee($readComment->first()->getAttribute('body'));
@@ -60,7 +60,7 @@ class CommentsTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $photos, $comments) {
             $browser->loginAs($user)
-                ->visit('/photos')
+                ->visit('/app/#/comments')
                 ->waitFor('.comments-manager', 3)
                 ->assertSee($comments->first()->getAttribute('body'))
                 ->click('.mark-read')
@@ -84,7 +84,7 @@ class CommentsTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $photo) {
             $browser->loginAs($user)
-                ->visit('/photos')
+                ->visit('/app/#/comments')
                 ->waitFor('.comments-manager', 3)
                 ->assertSee($photo->getAttribute('name'))
                 ->click('.read-all-button')
