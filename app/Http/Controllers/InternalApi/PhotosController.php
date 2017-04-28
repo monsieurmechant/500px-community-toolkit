@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\InternalApi;
 
+use App\Events\UserRequestedPhotos;
 use App\Photo;
 use \App\Http\Requests\Photos as R;
 use Carbon\Carbon;
@@ -17,6 +18,8 @@ class PhotosController extends InternalApiController
      */
     public function index(R\GetCollectionRequest $request)
     {
+        event(new UserRequestedPhotos($request->user()));
+
         $photos = Photo::where('user_id', '=', $request->user()->getAttribute('id'));
         if ($request->has('cursor')) {
             $photos->where('posted_at', '<=', base64_decode($request->query('cursor')));

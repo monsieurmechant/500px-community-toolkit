@@ -63,6 +63,9 @@ Please note that this app heavily relies on [Laravel Queued Jobs and Events](htt
 You will need to run a listener for the following queues:
   * default
   * comments
+  * comments-high
+  * photos
+  * photos-high
   * followers
   * followers-heavy
  

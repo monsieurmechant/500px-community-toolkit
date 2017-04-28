@@ -26,7 +26,8 @@ class TopFollowersTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $followers) {
             $browser->loginAs($user)
-                ->visit('/app/#/followers');
+                ->visit('/app/#/followers')
+                ->pause(1000);
 
             for ($i = 0; $i < 10; $i++) {
                 $browser->assertSee($followers->random()->getAttribute('name'));

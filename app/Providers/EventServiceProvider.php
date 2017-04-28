@@ -23,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\PhotoCreated::class => [
             \App\Listeners\Photos\FetchComments::class,
+        ],
+        \App\Events\UserRequestedPhotos::class => [
+            \App\Listeners\Users\RefreshData::class,
         ]
     ];
 

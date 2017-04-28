@@ -31,6 +31,7 @@ class FetchFollowers implements ShouldQueue
     public function __construct(int $userId)
     {
         $this->userId = $userId;
+        $this->onQueue('followers');
     }
 
     /**

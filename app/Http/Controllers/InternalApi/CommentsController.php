@@ -12,6 +12,8 @@ class CommentsController extends InternalApiController
 {
 
     /**
+     * Get all the comments left by a follower on a user's photos.
+     *
      * @param R\GetCollectionRequest $request
      * @param Cache $cache
      * @return \Illuminate\Http\JsonResponse
