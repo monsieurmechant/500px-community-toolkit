@@ -5,7 +5,9 @@
 /public/css/*
 /public/js/*
 /vendor
+/database/*.sql
 /.idea
 Homestead.json
 Homestead.yaml
 .env
+.env.dusk.local
