@@ -12,12 +12,34 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 import store from './store';
+import VueRouter from 'vue-router';
+import routes from './routes';
 
-Vue.component('top-followers', require('./components/Followers/Top.vue'));
-Vue.component('comments-by-photos', require('./components/Comments/ListByPhotos.vue'));
-Vue.component('comments-counter', require('./components/Comments/Counter.vue'));
+
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+  routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, refresh the page and let Laravel
+    // handle the redirect to the login page.
+    if (Laravel.user) {
+      next();
+    } else {
+      location.reload();
+    }
+  } else {
+    next();
+  }
+});
 
 const app = new Vue({
-    el: '#app',
-    store
+  el: '#app',
+  router,
+  store,
+  render: h => h(require('./Components/App')),
 });
