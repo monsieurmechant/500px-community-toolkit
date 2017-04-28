@@ -41,5 +41,5 @@ const app = new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(require('./Components/App')),
+  render: h => h(require('./components/App')),
 });
