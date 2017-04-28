@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -15,18 +16,25 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Comments\FetchComments::class,
         Commands\Comments\FetchPhotos::class,
+        Commands\Users\FetchFollowers::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('photos:fetch')
+            ->daily();
+
+        $schedule->command('comments:fetch')
+            ->hourly();
+
+        $schedule->command('followers:fetch')
+            ->weekly();
     }
 
     /**

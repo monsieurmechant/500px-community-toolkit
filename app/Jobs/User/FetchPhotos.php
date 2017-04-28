@@ -32,6 +32,7 @@ class FetchPhotos implements ShouldQueue
     public function __construct(int $userId)
     {
         $this->userId = $userId;
+        $this->onQueue('photos');
     }
 
     /**
@@ -86,7 +87,11 @@ class FetchPhotos implements ShouldQueue
     }
 
     /**
-     * Persists all the followers to the Database
+     * Persists all the new user photos to the database.
+     * All the photos are returned most recent first.
+     * Once we get to a photo that is already in
+     * the database we throw and exceptions
+     * and stop the whole job.
      *
      * @param array $photos
      * @return void
@@ -109,7 +114,7 @@ class FetchPhotos implements ShouldQueue
     }
 
     /**
-     * Persist a followed user to the database
+     * Persist a photo to the database
      *
      * @param $photo
      */

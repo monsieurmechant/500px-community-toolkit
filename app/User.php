@@ -42,6 +42,7 @@ class User extends Authenticatable
         'avatar',
         'access_token',
         'followers_count',
+        'quick_replies',
     ];
 
     /**
@@ -61,7 +62,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'            => 'integer',
+        'quick_replies' => 'array'
     ];
 
     /**
@@ -89,5 +91,43 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->hasManyThrough(\App\Comment::class, \App\Photo::class);
+    }
+
+    /**
+     * Adds a new quick reply to the
+     * quick replies array.
+     *
+     * @param string $reply
+     * @return $this
+     */
+    public function addQuickReply(string $reply)
+    {
+        $qReplies = $this->getAttribute('quick_replies');
+        $qReplies[] = $reply;
+        $this->setAttribute('quick_replies', $qReplies);
+
+        return $this;
+    }
+
+    /**
+     * Removes a quick reply from the
+     * quick replies array.
+     *
+     * @param string $reply
+     * @return $this
+     */
+    public function removeQuickReply(string $reply)
+    {
+        $qReplies = $this->getAttribute('quick_replies');
+
+        $key = array_search($reply, $qReplies);
+        if (!$key) {
+            return $this;
+        }
+
+        array_splice($qReplies, $key, 1);
+        $this->setAttribute('quick_replies', $qReplies);
+
+        return $this;
     }
 }

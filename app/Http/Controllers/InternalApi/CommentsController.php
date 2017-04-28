@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers\InternalApi;
 
-use Cache;
 use App\Jobs\StoreCommentFromApi;
 use \App\Http\Requests\Comments as R;
 use Illuminate\Database\Eloquent as E;
+use Illuminate\Cache\Repository as Cache;
 use App\Http\Services\FiveHundredPxService;
 
 class CommentsController extends InternalApiController
 {
 
     /**
+     * Get all the comments left by a follower on a user's photos.
+     *
      * @param R\GetCollectionRequest $request
+     * @param Cache $cache
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(R\GetCollectionRequest $request)
+    public function index(R\GetCollectionRequest $request, Cache $cache)
     {
 
-        return Cache::tags('follower_comments_' . $request->query('follower_id'))
+        return $cache->tags('follower_comments_' . $request->query('follower_id'))
             ->rememberForever(
                 'follower_comments_response_' . $request->query('follower_id') . '_' . $request->user()->getAttribute('id'),
                 function () use ($request) {

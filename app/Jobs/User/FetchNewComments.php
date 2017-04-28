@@ -15,6 +15,7 @@ class FetchNewComments implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     /**
      * @var User
      */
@@ -28,6 +29,7 @@ class FetchNewComments implements ShouldQueue
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->onQueue('comments');
     }
 
     /**

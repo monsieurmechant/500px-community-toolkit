@@ -35,6 +35,7 @@ class FetchComments implements ShouldQueue
     public function __construct(int $mediaId)
     {
         $this->mediaId = $mediaId;
+        $this->onQueue('comments');
     }
 
     /**

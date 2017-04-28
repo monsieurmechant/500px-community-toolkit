@@ -9,7 +9,7 @@ use Facebook\WebDriver\Remote\DesiredCapabilities;
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
-
+    use DisableModelEvents;
     /**
      * Prepare for Dusk test execution.
      *
